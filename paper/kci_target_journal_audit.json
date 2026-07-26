@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-07-27",
+  "authority": "한국연구재단 한국학술지인용색인(KCI)",
+  "form_url": "https://www.kci.go.kr/kciportal/po/search/poSereSear.kci",
+  "result_url": "https://www.kci.go.kr/kciportal/po/search/poSereSearList.kci",
+  "form_sha256": "f5da9a4c7ee437392b1cecb67a4732bdab298a3261a1be7efb63ae3ede5145d6",
+  "target": {
+    "korean_title": "범죄와 정책",
+    "english_title": "The Korean Crime and Policy Review",
+    "publisher": "한국범죄학회"
+  },
+  "queries": [
+    {
+      "query_id": "unquoted_korean_title",
+      "condition": "SERE_NM",
+      "keyword": "범죄와 정책",
+      "result_count": 1,
+      "items": [
+        {
+          "sere_id": "SER000006287",
+          "journal_title": "범죄와 경찰정책학회보 (Journal of Crime and Police Policy)"
+        }
+      ],
+      "response_sha256": "52cf28119904fdd2e0737afca8a809c8765ae24163f9dad66d6a166fba151d4b"
+    },
+    {
+      "query_id": "quoted_korean_title",
+      "condition": "SERE_NM",
+      "keyword": "\"범죄와 정책\"",
+      "result_count": 0,
+      "items": [],
+      "response_sha256": "1c3d01ef898d82c96759a7e5ef1ebf2dfa1643dcc376e7200f3eb230fddd2fe2"
+    },
+    {
+      "query_id": "english_title",
+      "condition": "SERE_NM",
+      "keyword": "The Korean Crime and Policy Review",
+      "result_count": 0,
+      "items": [],
+      "response_sha256": "73b616ded2e6b6bb4022bdec196de750cd2d244c0a7f0a1acc151753d918269f"
+    },
+    {
+      "query_id": "publisher_name",
+      "condition": "PUBI_INSI_NM",
+      "keyword": "한국범죄학회",
+      "result_count": 4,
+      "items": [
+        {
+          "sere_id": "SER000008856",
+          "journal_title": "범죄학연구 (Korean Journal of Criminology and Criminal Science)"
+        },
+        {
+          "sere_id": "SER000003201",
+          "journal_title": "한국중독범죄학회보 (Korean Association of Addiction Crime Review)"
+        },
+        {
+          "sere_id": "SER000004626",
+          "journal_title": "한국범죄정보연구 (Korea Criminal Intelligence Review)"
+        },
+        {
+          "sere_id": "SER000010388",
+          "journal_title": "한국범죄심리연구 (Korean Criminal Psychology Review)"
+        }
+      ],
+      "response_sha256": "5fe397c157223f1aa9aa3817ee795974927d6e179ed23ee2ab3b7ddf36be899c"
+    }
+  ],
+  "finding": {
+    "exact_catalog_record_found": false,
+    "state": "NO_EXACT_KCI_JOURNAL_RECORD_FOUND",
+    "interpretation": "No exact Korean- or English-title record was returned by the official KCI journal search on the audit date.",
+    "caveat": "Search absence does not prove non-registration or non-indexing; catalog update lag is possible, so editor confirmation remains required."
+  }
+}

@@ -650,6 +650,67 @@ def main() -> None:
         ),
     }
 
+    kci_journal_audit = json.loads(
+        (ROOT / "paper" / "kci_target_journal_audit.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert kci_journal_audit["authority"] == (
+        "한국연구재단 한국학술지인용색인(KCI)"
+    )
+    assert kci_journal_audit["form_url"] == (
+        "https://www.kci.go.kr/kciportal/po/search/poSereSear.kci"
+    )
+    assert kci_journal_audit["result_url"] == (
+        "https://www.kci.go.kr/kciportal/po/search/poSereSearList.kci"
+    )
+    assert kci_journal_audit["target"] == {
+        "korean_title": "범죄와 정책",
+        "english_title": "The Korean Crime and Policy Review",
+        "publisher": "한국범죄학회",
+    }
+    assert [
+        (
+            query["query_id"],
+            query["condition"],
+            query["keyword"],
+            query["result_count"],
+        )
+        for query in kci_journal_audit["queries"]
+    ] == [
+        ("unquoted_korean_title", "SERE_NM", "범죄와 정책", 1),
+        ("quoted_korean_title", "SERE_NM", '"범죄와 정책"', 0),
+        (
+            "english_title",
+            "SERE_NM",
+            "The Korean Crime and Policy Review",
+            0,
+        ),
+        ("publisher_name", "PUBI_INSI_NM", "한국범죄학회", 4),
+    ]
+    unquoted_items = kci_journal_audit["queries"][0]["items"]
+    assert unquoted_items == [
+        {
+            "sere_id": "SER000006287",
+            "journal_title": (
+                "범죄와 경찰정책학회보 (Journal of Crime and Police Policy)"
+            ),
+        }
+    ]
+    assert kci_journal_audit["finding"] == {
+        "exact_catalog_record_found": False,
+        "state": "NO_EXACT_KCI_JOURNAL_RECORD_FOUND",
+        "interpretation": (
+            "No exact Korean- or English-title record was returned by the "
+            "official KCI journal search on the audit date."
+        ),
+        "caveat": (
+            "Search absence does not prove non-registration or non-indexing; "
+            "catalog update lag is possible, so editor confirmation remains "
+            "required."
+        ),
+    }
+
     review_packet = json.loads(
         (ROOT / "paper" / "overblocking_review_packet_77.json").read_text(
             encoding="utf-8"
@@ -855,7 +916,7 @@ def main() -> None:
     print(json.dumps(summary, ensure_ascii=False, indent=2, default=dict))
     print(
         "\nLEGACY, POST-MUTATION, REPOSITORY-SCOPE, TARGET-JOURNAL-ARCHIVE, "
-        "LAW, SERVICE-DOMAIN, 77-CASE "
+        "KCI-CATALOG, LAW, SERVICE-DOMAIN, 77-CASE "
         "REVIEW-PACKET, AND 13-SOURCE CITATION ASSERTIONS PASSED"
     )
 
