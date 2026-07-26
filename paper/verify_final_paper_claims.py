@@ -544,6 +544,80 @@ def main() -> None:
         "globally_unique_documents": 693,
     }
 
+    repository_scope = json.loads(
+        (ROOT / "paper" / "repository_scope_audit.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert repository_scope["repository_count"] == 4
+    assert repository_scope["counts"] == {
+        "active_branches": 42,
+        "preserved_pr_heads": 68,
+        "total_refs": 110,
+        "note": "branch and PR-head categories may point to the same commit",
+    }
+    expected_repository_mains = {
+        "KPIIGD/My-AI-Security-Project": (
+            False,
+            39,
+            68,
+            "694ca717dd47e3d8f229bfa4da84c1fad607576b",
+        ),
+        "KPIIGD/My-AI-Security-Project-data": (
+            True,
+            1,
+            0,
+            "cc6288d0d868442dca2260e742dd8bc2eedbf472",
+        ),
+        "KPIIGD/My-AI-Security-Project-internal": (
+            True,
+            1,
+            0,
+            "6e9c6beef29d5c6484197a4772a4d10c13fdde5d",
+        ),
+        "KPIIGD/ai-security-kb": (
+            True,
+            1,
+            0,
+            "72f8eb17a38ccf34de30aa0091555c06a8eed563",
+        ),
+    }
+    assert {
+        row["repository"] for row in repository_scope["repositories"]
+    } == set(expected_repository_mains)
+    for row in repository_scope["repositories"]:
+        expected = expected_repository_mains[row["repository"]]
+        assert (
+            row["private"],
+            row["branch_count"],
+            row["pr_head_count"],
+            row["main_sha"],
+        ) == expected
+        assert row["default_branch"] == "main"
+        assert not row["archived"]
+        assert len(row["branches"]) == row["branch_count"]
+        assert len({branch["ref"] for branch in row["branches"]}) == len(
+            row["branches"]
+        )
+        assert len(row["pr_heads"]) == row["pr_head_count"]
+        assert len({pr["number"] for pr in row["pr_heads"]}) == len(
+            row["pr_heads"]
+        )
+    latest_public_pr = repository_scope["latest_public_pr"]
+    assert latest_public_pr["number"] == 88
+    assert latest_public_pr["headRefOid"] == (
+        "51d8dc22ade696d98a6b28236b1cb69535c992e5"
+    )
+    assert latest_public_pr["paper_evidence_impact"] == "none_workflow_only"
+    assert latest_public_pr["files"] == [
+        {
+            "path": ".github/workflows/layer_0_tests.yml",
+            "additions": 1,
+            "deletions": 1,
+            "changeType": "MODIFIED",
+        }
+    ]
+
     review_packet = json.loads(
         (ROOT / "paper" / "overblocking_review_packet_77.json").read_text(
             encoding="utf-8"
@@ -584,6 +658,21 @@ def main() -> None:
         ).hexdigest() == case["text_sha256"]
         assert case["finding_types"]
         assert case["reason_codes"]
+    evidence_book = (
+        ROOT / "paper" / "과잉차단_77건_원문증거집.md"
+    ).read_text(encoding="utf-8")
+    assert f"`{review_packet['case_set_sha256']}`" in evidence_book
+    evidence_ids = re.findall(
+        r"(?m)^## \d{3}\. ((?:law|service)-\S+)$",
+        evidence_book,
+    )
+    assert len(evidence_ids) == 77
+    assert evidence_ids == [case["case_id"] for case in review_cases]
+    for case in review_cases:
+        assert case["official_url"] in evidence_book
+        assert case["text_sha256"] in evidence_book
+        for public_line in case["official_public_text"].splitlines():
+            assert f"> {public_line}" in evidence_book
     review_form_pattern = re.compile(
         r"(?m)^\|\s*((?:law|service)-[^| ]+)\s*\|\s*[^|]*\|\s*[^|]*\|\s*$"
     )
@@ -593,6 +682,7 @@ def main() -> None:
     ):
         form_text = (ROOT / "paper" / form_name).read_text(encoding="utf-8")
         assert f"`{review_packet['case_set_sha256']}`" in form_text
+        assert "`과잉차단_77건_원문증거집.md`" in form_text
         form_ids = review_form_pattern.findall(form_text)
         assert len(form_ids) == 77
         assert set(form_ids) == {case["case_id"] for case in review_cases}
@@ -603,6 +693,8 @@ def main() -> None:
     required_manuscript_claims = (
         "# 생성형 AI의 한국어 개인식별정보(PII) 유출 위험과 정규화 기반 Layer 0의 필요성",
         "Korean Personally Identifiable Information Leakage Risks in Generative AI",
+        "110개 원격 참조",
+        "110 remote references",
         "9,964건(99.64%)",
         "2,060건(20.67%)",
         "706건(7.09%)",
@@ -635,6 +727,8 @@ def main() -> None:
         "# 생성형 AI의 한국어 민감정보 유출 위험과 정규화 기반 Layer 0의 필요성",
         "Korean Sensitive-Information Leakage Risks in Generative AI",
         "서비스 도메인의 자연발생 hard negative가 여전히 필요하다",
+        "109개 원격 참조",
+        "109 remote references",
     )
     for claim in forbidden_primary_claims:
         assert claim not in manuscript, claim
@@ -681,6 +775,19 @@ def main() -> None:
     )
     for claim in required_submission_record_claims:
         assert claim in submission_record, claim
+    external_gate_form = (
+        ROOT / "paper" / "투고전_외부확인_및_저자정보_입력양식.md"
+    ).read_text(encoding="utf-8")
+    for claim in (
+        "DOCX 원고 접수 허용 여부와 HWP 필수 여부",
+        "현재 KCI 등록·등재·등재후보 상태",
+        "ksoc.edit@gmail.com",
+        "주민등록번호",
+        "공개 브랜치에 커밋하지 않는다",
+        "77건 A/B 독립판정 및 불일치 합의 완료",
+        "KCI 문헌유사도 15% 이하 결과서 확보",
+    ):
+        assert claim in external_gate_form, claim
 
     citation_audit = json.loads(
         (ROOT / "paper" / "citation_source_audit.json").read_text(
@@ -715,7 +822,7 @@ def main() -> None:
 
     print(json.dumps(summary, ensure_ascii=False, indent=2, default=dict))
     print(
-        "\nLEGACY, POST-MUTATION, LAW, SERVICE-DOMAIN, 77-CASE "
+        "\nLEGACY, POST-MUTATION, REPOSITORY-SCOPE, LAW, SERVICE-DOMAIN, 77-CASE "
         "REVIEW-PACKET, AND 13-SOURCE CITATION ASSERTIONS PASSED"
     )
 

@@ -3,7 +3,8 @@
 
 The source text is public official prose. This script re-fetches it through the
 two existing audit programs, verifies the live extraction against the committed
-baselines, and then emits one evidence packet plus two decision-isolated forms.
+baselines, and then emits one machine-readable packet, one human-readable
+evidence book, plus two decision-isolated forms.
 """
 
 from __future__ import annotations
@@ -22,6 +23,7 @@ PAPER_DIR = Path(__file__).resolve().parent
 LAW_BASELINE = PAPER_DIR / "public_law_hard_negative_audit.json"
 SERVICE_BASELINE = PAPER_DIR / "public_service_hard_negative_audit.json"
 PACKET_PATH = PAPER_DIR / "overblocking_review_packet_77.json"
+EVIDENCE_BOOK_PATH = PAPER_DIR / "과잉차단_77건_원문증거집.md"
 REVIEWER_A_PATH = PAPER_DIR / "과잉차단_검토자_A_독립판정표.md"
 REVIEWER_B_PATH = PAPER_DIR / "과잉차단_검토자_B_독립판정표.md"
 INSTRUCTIONS_PATH = PAPER_DIR / "과잉차단_2인독립검토_실행안내.md"
@@ -209,11 +211,12 @@ def reviewer_form(reviewer: str, packet: dict[str, Any]) -> str:
     lines = [
         f"# 과잉차단 후보 77건 — 검토자 {reviewer} 독립 판정표",
         "",
-        f"- 증거 패킷: `overblocking_review_packet_77.json`",
+        "- 검토용 원문: `과잉차단_77건_원문증거집.md`",
+        "- 기계검증 원본: `overblocking_review_packet_77.json`",
         f"- 사례 집합 SHA-256: `{packet['case_set_sha256']}`",
         "- 허용 판정: `FP`, `TP`, `U`",
         "- 독립성 원칙: 상대 검토자의 파일을 열어보지 않은 상태에서 완성한다.",
-        "- 원문 확인: 증거 패킷에서 동일 `case_id`의 공식 URL·원문·탐지근거를 확인한다.",
+        "- 원문 확인: 원문증거집에서 동일 `case_id`의 공식 URL·원문·탐지근거를 확인한다.",
         "",
         "판정 칸에는 세 값 중 하나만 입력한다. 근거는 한 줄로 작성하고 `|` 문자는 쓰지 않는다.",
         "",
@@ -232,7 +235,50 @@ def reviewer_form(reviewer: str, packet: dict[str, Any]) -> str:
             "- 상대 검토자의 판정을 보지 않고 완료했음: [ ]",
         ]
     )
-    return "\n".join(lines) + "\n"
+    return "\n".join(lines).rstrip() + "\n"
+
+
+def evidence_book(packet: dict[str, Any]) -> str:
+    lines = [
+        "# 과잉차단 후보 77건 원문 증거집",
+        "",
+        "- 용도: 검토자 A/B가 동일한 고정 증거를 읽기 위한 사람용 문서",
+        "- 판정 기록 금지: 이 파일에는 어떤 검토자의 판단도 적지 않는다.",
+        f"- 사례 집합 SHA-256: `{packet['case_set_sha256']}`",
+        "- 기계검증 원본: `overblocking_review_packet_77.json`",
+        "",
+        "각 항목의 공식 URL을 열어 문맥을 재확인한 뒤, 자신의 독립 판정표에만 "
+        "`FP`, `TP`, `U`와 한 줄 근거를 기록한다.",
+        "",
+    ]
+    for index, row in enumerate(packet["cases"], start=1):
+        location = ", ".join(
+            f"{key}={value}"
+            for key, value in row["location"].items()
+            if value not in (None, "")
+        )
+        finding_types = ", ".join(row["finding_types"])
+        reason_codes = ", ".join(row["reason_codes"])
+        public_text = row["official_public_text"].replace("\r\n", "\n")
+        lines.extend(
+            [
+                f"## {index:03d}. {row['case_id']}",
+                "",
+                f"- 구분: `{row['corpus']}` / `{row['domain']}`",
+                f"- 출처: {row['source_title']} (`{row['source_id']}`)",
+                f"- 위치: {location}",
+                f"- 공식 원문: [{row['official_url']}]({row['official_url']})",
+                f"- 탐지 유형: `{finding_types}`",
+                f"- 탐지 근거: `{reason_codes}`",
+                f"- 원문 SHA-256: `{row['text_sha256']}`",
+                "",
+                "**고정 공개 원문**",
+                "",
+            ]
+        )
+        lines.extend(f"> {line}" if line else ">" for line in public_text.split("\n"))
+        lines.append("")
+    return "\n".join(lines).rstrip() + "\n"
 
 
 def instructions(packet: dict[str, Any]) -> str:
@@ -245,6 +291,7 @@ def instructions(packet: dict[str, Any]) -> str:
 ## 고정 증거
 
 - 증거 파일: `paper/overblocking_review_packet_77.json`
+- 사람용 원문 증거집: `paper/과잉차단_77건_원문증거집.md`
 - 사례 집합 SHA-256: `{packet['case_set_sha256']}`
 - 법령 후보: 29건
 - 서비스 후보: 48건(의료 44건, 개발문서 4건)
@@ -254,29 +301,30 @@ def instructions(packet: dict[str, Any]) -> str:
 ## 실행 순서
 
 1. 담당자가 `python paper/build_overblocking_review_packets.py --verify`로 패킷 무결성을 확인한다.
-2. 검토자 A에게 `과잉차단_검토자_A_독립판정표.md`만 배정한다.
-3. 검토자 B에게 `과잉차단_검토자_B_독립판정표.md`만 배정한다.
-4. 두 검토자는 상대 파일을 열지 않고 증거 패킷의 동일 사례 원문을 확인해 `FP`, `TP`, `U` 중 하나를 입력한다.
-5. 두 파일이 모두 잠긴 뒤 담당자가 다음 명령을 실행한다.
+2. 두 검토자에게 판정이 없는 공통 읽기자료 `과잉차단_77건_원문증거집.md`를 배정한다.
+3. 검토자 A에게 `과잉차단_검토자_A_독립판정표.md`만 배정한다.
+4. 검토자 B에게 `과잉차단_검토자_B_독립판정표.md`만 배정한다.
+5. 두 검토자는 상대 파일을 열지 않고 원문증거집의 동일 사례를 확인해 `FP`, `TP`, `U` 중 하나를 입력한다.
+6. 두 파일이 모두 잠긴 뒤 담당자가 다음 명령을 실행한다.
 
 ```powershell
 python paper/compile_overblocking_reviews.py
 ```
 
-6. 두 파일이 모두 완성되면 아래 명령으로 독립판정의 단순 일치율·Cohen's κ와 불일치 조정표를 생성한다.
+7. 두 파일이 모두 완성되면 아래 명령으로 독립판정의 단순 일치율·Cohen's κ와 불일치 조정표를 생성한다.
 
 ```powershell
 python paper/compile_overblocking_reviews.py --require-complete --emit-adjudication paper/과잉차단_불일치조정표.md
 ```
 
-7. 불일치 사례는 두 검토자가 원문을 함께 재확인하고 생성된 표에 합의 판정과 이유를 기록한다.
-8. 다음 명령으로 합의 표를 검증하고 최종 JSON 집계를 만든다.
+8. 불일치 사례는 두 검토자가 원문을 함께 재확인하고 생성된 표에 합의 판정과 이유를 기록한다.
+9. 다음 명령으로 합의 표를 검증하고 최종 JSON 집계를 만든다.
 
 ```powershell
 python paper/compile_overblocking_reviews.py --require-complete --adjudication paper/과잉차단_불일치조정표.md --summary-output paper/과잉차단_2인검토_최종집계.json
 ```
 
-9. 합의 결과가 완성되기 전까지 논문에는 “과잉차단 후보 77건”으로만 표현한다.
+10. 합의 결과가 완성되기 전까지 논문에는 “과잉차단 후보 77건”으로만 표현한다.
 
 ## 판정 경계
 
@@ -292,6 +340,7 @@ def expected_outputs() -> dict[Path, str]:
     packet = make_packet()
     return {
         PACKET_PATH: json.dumps(packet, ensure_ascii=False, indent=2) + "\n",
+        EVIDENCE_BOOK_PATH: evidence_book(packet),
         REVIEWER_A_PATH: reviewer_form("A", packet),
         REVIEWER_B_PATH: reviewer_form("B", packet),
         INSTRUCTIONS_PATH: instructions(packet),

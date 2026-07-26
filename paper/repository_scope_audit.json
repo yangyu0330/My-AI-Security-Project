@@ -1,0 +1,525 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-07-26",
+  "organization": "KPIIGD",
+  "repository_count": 4,
+  "repositories": [
+    {
+      "remote": "kpiigd",
+      "repository": "KPIIGD/My-AI-Security-Project",
+      "private": false,
+      "archived": false,
+      "default_branch": "main",
+      "main_sha": "694ca717dd47e3d8f229bfa4da84c1fad607576b",
+      "branch_count": 39,
+      "branches": [
+        {
+          "ref": "chore/org-migration-governance",
+          "sha": "287f0ebb6060a887ccd8370827e76356b6f23f2f"
+        },
+        {
+          "ref": "codex/korean-pii-product-console",
+          "sha": "cf3b9d348ca17757c194469ea828fc43059ad041"
+        },
+        {
+          "ref": "codex/korean-pii-product-console-clean",
+          "sha": "b2dd0815378d371949ee229b96419ecae0f5db25"
+        },
+        {
+          "ref": "codex/organize-keojung-direct-doc",
+          "sha": "36efa8e166b5163f2f79f3162855145ceeb07b93"
+        },
+        {
+          "ref": "codex/paper-presentation-materials",
+          "sha": "dd9fa7784f958e61b92e2b1bbba86040c3f743f8"
+        },
+        {
+          "ref": "demo/live-showcase",
+          "sha": "88acc46671599eef03daccdcf410c857d58ff467"
+        },
+        {
+          "ref": "dependabot/github_actions/actions/checkout-7",
+          "sha": "6ce61ea51f4ec695271fef74c5b11d143d1a77cb"
+        },
+        {
+          "ref": "dependabot/github_actions/actions/setup-python-7",
+          "sha": "51d8dc22ade696d98a6b28236b1cb69535c992e5"
+        },
+        {
+          "ref": "dependabot/github_actions/github/codeql-action-4",
+          "sha": "89f08a15c0111983689bb25766a69affb49122f4"
+        },
+        {
+          "ref": "dependabot/npm_and_yarn/korean_pii_guardrail_v0_2/web/body-parser-2.3.0",
+          "sha": "b3c57b9395741fe3495716a376e4e604e8a237c9"
+        },
+        {
+          "ref": "dependabot/npm_and_yarn/korean_pii_guardrail_v0_2/web/brace-expansion-5.0.7",
+          "sha": "5298f15933b0a71eddf7d85777d64199d1d2ad1e"
+        },
+        {
+          "ref": "dependabot/npm_and_yarn/korean_pii_guardrail_v0_2/web/fast-uri-3.1.4",
+          "sha": "2fa1f1592bfffa2f293bd24ed001b521838f6117"
+        },
+        {
+          "ref": "dependabot/npm_and_yarn/korean_pii_guardrail_v0_2/web/hono-4.12.31",
+          "sha": "618a919cb3f4c1a2abb25ef61ddcf8ceb1751497"
+        },
+        {
+          "ref": "dependabot/pip/PII/results/phase6/transformers-5.5.0",
+          "sha": "91dc5ac7abb0194654e366b492d06499789b6783"
+        },
+        {
+          "ref": "dependabot/pip/korean_pii_guardrail_v0_2/gradio-gte-6.20.0-and-lt-7.0",
+          "sha": "00e19a6baa3c3bd3f64702f0e87bc7dd18aaa74b"
+        },
+        {
+          "ref": "dependabot/pip/korean_pii_guardrail_v0_2/huggingface-hub-gte-1.24.0",
+          "sha": "f5c82207735bdd3e708bd5ccce9e845015413206"
+        },
+        {
+          "ref": "dependabot/pip/korean_pii_guardrail_v0_2/matplotlib-gte-3.11.1",
+          "sha": "04e835f23eeb56b5d86a1dfbfd8ec10aba9eba9a"
+        },
+        {
+          "ref": "docs/14-ner-design-v1",
+          "sha": "f4496dc68aff30373e7faf5eedcc15a3c9606c11"
+        },
+        {
+          "ref": "docs/ai-automation-baseline",
+          "sha": "9e1c54e4a54df1a3cef9e81675f88968b2dc0171"
+        },
+        {
+          "ref": "docs/document-input-design-review",
+          "sha": "8c850a4ace223a9f7d05ce797da57e7502d5814e"
+        },
+        {
+          "ref": "docs/ner-onnx-int8-latency",
+          "sha": "8a0c82e2ecf507d88c7fc02b6d5a5030baad7ff8"
+        },
+        {
+          "ref": "feat/ner-v4-vessl-results",
+          "sha": "e9aa20d76a513680439a33528417b0b31b541cf1"
+        },
+        {
+          "ref": "feat/sensitive-pii-detection",
+          "sha": "333f315af1fa3187df624f60341c2cdccfa008e6"
+        },
+        {
+          "ref": "feature/issue42-detector-config",
+          "sha": "88862afef0f489b368410659b9898dd748230e5d"
+        },
+        {
+          "ref": "feature/korean-boundary",
+          "sha": "f9c994dac3a870bad8834c31a126ccf77ed47e39"
+        },
+        {
+          "ref": "feature/m10-evaluation-harness",
+          "sha": "8265267a1dc937f311e7f41c47f12f1f937b2c23"
+        },
+        {
+          "ref": "feature/m6-span-resolver",
+          "sha": "ff32c1903ebbc7e4e347a55dd22001601490f40c"
+        },
+        {
+          "ref": "feature/m7-policy-masker",
+          "sha": "1bd2bca88ab3355b35efc7300b74c520fa2d963f"
+        },
+        {
+          "ref": "feature/m8-audit-logger",
+          "sha": "111f74906e86b9368dd3280abdc34aee24b05d8d"
+        },
+        {
+          "ref": "feature/m9-pipeline-integration",
+          "sha": "154c647743e1b8528f5fc6a84dc654191e91b037"
+        },
+        {
+          "ref": "feature/pipeline-trace",
+          "sha": "a2db12ea0e3c9db5b677e4eb87d3cc9fc5f7be16"
+        },
+        {
+          "ref": "feature/trace-stage-detail",
+          "sha": "671e3bcaf045d64a0cbdc11d35342865c79aa569"
+        },
+        {
+          "ref": "fix/ci-ner-torch-lazy-import",
+          "sha": "656fc3a3fe73d0ec2b1fd14aca41938658bf4fbb"
+        },
+        {
+          "ref": "fix/claude-review-workflows",
+          "sha": "9cb30ae94cbfe3d87b5181d98a48c2b88921d8dc"
+        },
+        {
+          "ref": "fix/demo-boundary-regressions",
+          "sha": "a5190d78f3f3ef229ce2dcab68be5490a1f3f6b5"
+        },
+        {
+          "ref": "fix/m4-pr10-review-issues",
+          "sha": "646ba4f3b45367b5d803505bd354c2b30f587f71"
+        },
+        {
+          "ref": "fix/rrn-label-mask",
+          "sha": "8f0397e73289fb842cb6d96da8efc69076db4381"
+        },
+        {
+          "ref": "litellm-gateway",
+          "sha": "aa8a19dfb4a49101b0830641f12c384061b09ae3"
+        },
+        {
+          "ref": "main",
+          "sha": "694ca717dd47e3d8f229bfa4da84c1fad607576b"
+        }
+      ],
+      "pr_head_count": 68,
+      "pr_heads": [
+        {
+          "number": 1,
+          "sha": "f4b427878db26bf91ad783c46886b0d73af283c2"
+        },
+        {
+          "number": 2,
+          "sha": "aa09bffee730160789d98e39aafd2de8a06847d0"
+        },
+        {
+          "number": 3,
+          "sha": "f4496dc68aff30373e7faf5eedcc15a3c9606c11"
+        },
+        {
+          "number": 4,
+          "sha": "feb5373e7e6288f26d9068b4c6463ff7dc9253fa"
+        },
+        {
+          "number": 5,
+          "sha": "b123e8c2c7374427bf4980ab4b1fe3548a4d6851"
+        },
+        {
+          "number": 6,
+          "sha": "776d4cb8fef4e9dfd9cb845253f6ec83a04b0378"
+        },
+        {
+          "number": 7,
+          "sha": "53b898a34928cd6d14c38213656e03f4a7488d6c"
+        },
+        {
+          "number": 8,
+          "sha": "177e7f16452d41b8ba67717f0bfa7f504a5c80ba"
+        },
+        {
+          "number": 9,
+          "sha": "74d2588ad8adaeb55c09d246745b62e9cffc4ed5"
+        },
+        {
+          "number": 10,
+          "sha": "19a38f72b572f805dc7925f83d0814ce6ecb6563"
+        },
+        {
+          "number": 11,
+          "sha": "55b7ed7dcc6254ca6e935d1710c4eff3eb620945"
+        },
+        {
+          "number": 12,
+          "sha": "f9c994dac3a870bad8834c31a126ccf77ed47e39"
+        },
+        {
+          "number": 13,
+          "sha": "646ba4f3b45367b5d803505bd354c2b30f587f71"
+        },
+        {
+          "number": 14,
+          "sha": "ff32c1903ebbc7e4e347a55dd22001601490f40c"
+        },
+        {
+          "number": 15,
+          "sha": "268fa6066fe7f15582d2d85f1738cb7bbf0e3c79"
+        },
+        {
+          "number": 16,
+          "sha": "fb4a3698a9f450948c757a19091231699b667d07"
+        },
+        {
+          "number": 17,
+          "sha": "b5e0b963efae343ac4f979708cda1f377a4af3e2"
+        },
+        {
+          "number": 20,
+          "sha": "1bd2bca88ab3355b35efc7300b74c520fa2d963f"
+        },
+        {
+          "number": 32,
+          "sha": "111f74906e86b9368dd3280abdc34aee24b05d8d"
+        },
+        {
+          "number": 33,
+          "sha": "a0b8b7ccce986fe9f51db2ee9ed5b77e1dbae22b"
+        },
+        {
+          "number": 34,
+          "sha": "8265267a1dc937f311e7f41c47f12f1f937b2c23"
+        },
+        {
+          "number": 37,
+          "sha": "2734624b13089417552f0e256dfa49c9176ac490"
+        },
+        {
+          "number": 38,
+          "sha": "8d1b77f170e5878abde4d0b583b7ff3cf7b8404e"
+        },
+        {
+          "number": 43,
+          "sha": "5b193285520bf7c113725184275d471eb21bc1de"
+        },
+        {
+          "number": 44,
+          "sha": "5b193285520bf7c113725184275d471eb21bc1de"
+        },
+        {
+          "number": 45,
+          "sha": "88862afef0f489b368410659b9898dd748230e5d"
+        },
+        {
+          "number": 46,
+          "sha": "8a0c82e2ecf507d88c7fc02b6d5a5030baad7ff8"
+        },
+        {
+          "number": 47,
+          "sha": "88acc46671599eef03daccdcf410c857d58ff467"
+        },
+        {
+          "number": 48,
+          "sha": "393a2e3efe94205dd456578face302234fe20a59"
+        },
+        {
+          "number": 49,
+          "sha": "a2db12ea0e3c9db5b677e4eb87d3cc9fc5f7be16"
+        },
+        {
+          "number": 50,
+          "sha": "36efa8e166b5163f2f79f3162855145ceeb07b93"
+        },
+        {
+          "number": 51,
+          "sha": "8c850a4ace223a9f7d05ce797da57e7502d5814e"
+        },
+        {
+          "number": 52,
+          "sha": "a5190d78f3f3ef229ce2dcab68be5490a1f3f6b5"
+        },
+        {
+          "number": 53,
+          "sha": "671e3bcaf045d64a0cbdc11d35342865c79aa569"
+        },
+        {
+          "number": 54,
+          "sha": "8f0397e73289fb842cb6d96da8efc69076db4381"
+        },
+        {
+          "number": 56,
+          "sha": "cf3b9d348ca17757c194469ea828fc43059ad041"
+        },
+        {
+          "number": 57,
+          "sha": "b2dd0815378d371949ee229b96419ecae0f5db25"
+        },
+        {
+          "number": 58,
+          "sha": "9e1c54e4a54df1a3cef9e81675f88968b2dc0171"
+        },
+        {
+          "number": 59,
+          "sha": "287f0ebb6060a887ccd8370827e76356b6f23f2f"
+        },
+        {
+          "number": 60,
+          "sha": "656fc3a3fe73d0ec2b1fd14aca41938658bf4fbb"
+        },
+        {
+          "number": 61,
+          "sha": "9cb30ae94cbfe3d87b5181d98a48c2b88921d8dc"
+        },
+        {
+          "number": 62,
+          "sha": "d1f6b0c9e29026509cd265632bbc03107dab7feb"
+        },
+        {
+          "number": 63,
+          "sha": "13528a3784cb6d82832c813d033f1edab850aba4"
+        },
+        {
+          "number": 64,
+          "sha": "6ce61ea51f4ec695271fef74c5b11d143d1a77cb"
+        },
+        {
+          "number": 65,
+          "sha": "89f08a15c0111983689bb25766a69affb49122f4"
+        },
+        {
+          "number": 66,
+          "sha": "061a948bbc1543b101d9f3ac27c75eb90ccae655"
+        },
+        {
+          "number": 67,
+          "sha": "203977a06e4a410e2d52aac97a2da8dc9d20bec3"
+        },
+        {
+          "number": 68,
+          "sha": "3fa1d922c6f2f0a7dd15d6c22794b0761372727f"
+        },
+        {
+          "number": 69,
+          "sha": "1fb0875b03cb992666c04e22a93311fcb8180859"
+        },
+        {
+          "number": 70,
+          "sha": "9f54ab7b465902f709e1f663845d2f8f47ee4aa1"
+        },
+        {
+          "number": 71,
+          "sha": "dd9fa7784f958e61b92e2b1bbba86040c3f743f8"
+        },
+        {
+          "number": 72,
+          "sha": "70c8a5487078166bdfc6842df585a32a13ef601e"
+        },
+        {
+          "number": 73,
+          "sha": "333f315af1fa3187df624f60341c2cdccfa008e6"
+        },
+        {
+          "number": 74,
+          "sha": "6b7f25a9f224695c8e26bcb6d3c81176eefbf199"
+        },
+        {
+          "number": 75,
+          "sha": "d484ffbc500c93c441a747b8f3c647b33f59fb77"
+        },
+        {
+          "number": 76,
+          "sha": "5b57d7a6661ec6a1f1827e81911eba6e835f792a"
+        },
+        {
+          "number": 77,
+          "sha": "408c5c606616bc0f9fb5224ce4cabee5a05ba797"
+        },
+        {
+          "number": 78,
+          "sha": "f1a72821fce587af826548ec1473fb4230a12c94"
+        },
+        {
+          "number": 79,
+          "sha": "00e19a6baa3c3bd3f64702f0e87bc7dd18aaa74b"
+        },
+        {
+          "number": 80,
+          "sha": "91dc5ac7abb0194654e366b492d06499789b6783"
+        },
+        {
+          "number": 81,
+          "sha": "e1479209219c672f780dfe94ec59e5d9d6ba98fa"
+        },
+        {
+          "number": 82,
+          "sha": "f5c82207735bdd3e708bd5ccce9e845015413206"
+        },
+        {
+          "number": 83,
+          "sha": "04e835f23eeb56b5d86a1dfbfd8ec10aba9eba9a"
+        },
+        {
+          "number": 84,
+          "sha": "5298f15933b0a71eddf7d85777d64199d1d2ad1e"
+        },
+        {
+          "number": 85,
+          "sha": "b3c57b9395741fe3495716a376e4e604e8a237c9"
+        },
+        {
+          "number": 86,
+          "sha": "618a919cb3f4c1a2abb25ef61ddcf8ceb1751497"
+        },
+        {
+          "number": 87,
+          "sha": "2fa1f1592bfffa2f293bd24ed001b521838f6117"
+        },
+        {
+          "number": 88,
+          "sha": "51d8dc22ade696d98a6b28236b1cb69535c992e5"
+        }
+      ]
+    },
+    {
+      "remote": "kpiigd-data",
+      "repository": "KPIIGD/My-AI-Security-Project-data",
+      "private": true,
+      "archived": false,
+      "default_branch": "main",
+      "main_sha": "cc6288d0d868442dca2260e742dd8bc2eedbf472",
+      "branch_count": 1,
+      "branches": [
+        {
+          "ref": "main",
+          "sha": "cc6288d0d868442dca2260e742dd8bc2eedbf472"
+        }
+      ],
+      "pr_head_count": 0,
+      "pr_heads": []
+    },
+    {
+      "remote": "kpiigd-internal",
+      "repository": "KPIIGD/My-AI-Security-Project-internal",
+      "private": true,
+      "archived": false,
+      "default_branch": "main",
+      "main_sha": "6e9c6beef29d5c6484197a4772a4d10c13fdde5d",
+      "branch_count": 1,
+      "branches": [
+        {
+          "ref": "main",
+          "sha": "6e9c6beef29d5c6484197a4772a4d10c13fdde5d"
+        }
+      ],
+      "pr_head_count": 0,
+      "pr_heads": []
+    },
+    {
+      "remote": "kpiigd-kb",
+      "repository": "KPIIGD/ai-security-kb",
+      "private": true,
+      "archived": false,
+      "default_branch": "main",
+      "main_sha": "72f8eb17a38ccf34de30aa0091555c06a8eed563",
+      "branch_count": 1,
+      "branches": [
+        {
+          "ref": "main",
+          "sha": "72f8eb17a38ccf34de30aa0091555c06a8eed563"
+        }
+      ],
+      "pr_head_count": 0,
+      "pr_heads": []
+    }
+  ],
+  "counts": {
+    "active_branches": 42,
+    "preserved_pr_heads": 68,
+    "total_refs": 110,
+    "note": "branch and PR-head categories may point to the same commit"
+  },
+  "latest_public_pr": {
+    "baseRefName": "main",
+    "headRefName": "dependabot/github_actions/actions/setup-python-7",
+    "headRefOid": "51d8dc22ade696d98a6b28236b1cb69535c992e5",
+    "number": 88,
+    "state": "OPEN",
+    "title": "chore(deps): bump actions/setup-python from 5 to 7",
+    "updatedAt": "2026-07-26T10:22:30Z",
+    "files": [
+      {
+        "path": ".github/workflows/layer_0_tests.yml",
+        "additions": 1,
+        "deletions": 1,
+        "changeType": "MODIFIED"
+      }
+    ],
+    "paper_evidence_impact": "none_workflow_only"
+  }
+}
