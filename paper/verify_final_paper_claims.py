@@ -13,8 +13,11 @@ from __future__ import annotations
 import ast
 import json
 import math
+import os
 import re
 import statistics
+import subprocess
+import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
@@ -428,8 +431,65 @@ def main() -> None:
         summary["layer0_detector"]["keyword_dict"],
     ) == expected["detector"]
 
+    postmutation_process = subprocess.run(
+        [sys.executable, str(ROOT / "paper" / "analyze_postmutation_gold.py")],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        env={**os.environ, "PYTHONIOENCODING": "utf-8"},
+    )
+    postmutation = json.loads(postmutation_process.stdout)
+    assert postmutation["gold_recovery"]["recovered"] == 9964
+    assert postmutation["postmutation_gold_performance"]["A"]["unblocked"] == 2060
+    assert postmutation["postmutation_gold_performance"]["C"]["unblocked"] == 706
+    assert postmutation["configuration_pairs"]["C_only"] == 1354
+    assert postmutation["configuration_pairs"]["A_only"] == 0
+    assert (
+        postmutation["configuration_pairs"]["C_only_with_direct_layer0_block"]
+        == 1353
+    )
+    assert (
+        postmutation["matched_original_mutation"]["korean"]["pairs"] == 2305
+    )
+    assert (
+        postmutation["matched_original_mutation"]["target_changed"]["pairs"]
+        == 2160
+    )
+    assert (
+        postmutation["layer0_false_positive_audit"]["false_positive_documents"]
+        == 0
+    )
+
+    manuscript = (
+        ROOT / "paper" / "범죄와정책_최종논문_검증반영.md"
+    ).read_text(encoding="utf-8")
+    required_manuscript_claims = (
+        "9,964건(99.64%)",
+        "2,060건(20.67%)",
+        "706건(7.09%)",
+        "1,354건",
+        "2,305쌍",
+        "9.12%에서 18.75%",
+        "필요하지만 충분하지 않은",
+        "한국어를 “Optimized and supported”",
+        "A Lifestyle-Routine Activity Theory (LRAT) Approach to Cybercrime Victimization: An Empirical Assessment of SNS Lifestyle Exposure Activities",
+        "블라데미르 T. 콩고·여승준·최진혁",
+        "대통령령 제36340호",
+        "presidio.dataprivacystack.org/supported_entities/",
+    )
+    for claim in required_manuscript_claims:
+        assert claim in manuscript, claim
+    forbidden_primary_claims = (
+        "변이 사례의 미차단율은 원형보다 3.93배",
+        "기존 계층이 놓친 999건",
+    )
+    for claim in forbidden_primary_claims:
+        assert claim not in manuscript, claim
+
     print(json.dumps(summary, ensure_ascii=False, indent=2, default=dict))
-    print("\nALL ASSERTIONS PASSED")
+    print("\nLEGACY AUDIT AND POST-MUTATION MANUSCRIPT ASSERTIONS PASSED")
 
 
 if __name__ == "__main__":
