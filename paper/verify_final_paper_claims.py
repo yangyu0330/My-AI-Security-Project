@@ -820,6 +820,19 @@ def main() -> None:
         "commit `694ca717dd47e3d8f229bfa4da84c1fad607576b`"
         in manuscript
     )
+    assert (
+        "표면형을 보존한 문맥 변형에서는 증가가 입증되지 않았다"
+        in manuscript
+    )
+    assert (
+        "The source-group equally weighted risk difference was 6.86 "
+        "percentage points (95% cluster-bootstrap CI: 4.06-9.69)."
+        in manuscript
+    )
+    assert (
+        "no increase was demonstrated for target-preserving context changes"
+        in manuscript
+    )
     required_manuscript_claims = (
         "# 생성형 AI의 한국어 개인식별정보(PII) 유출 위험과 정규화 기반 Layer 0의 필요성",
         "Korean Personally Identifiable Information Leakage Risks in Generative AI",
@@ -877,7 +890,7 @@ def main() -> None:
         flags=re.DOTALL,
     ).group(1).strip()
     english_abstract = re.search(
-        r"# ABSTRACT\s+## .+?\s+(.+?)\s+\*\*Key Words:",
+        r"# ABSTRACT\s+## [^\n]+\n+(.+?)\s+\*\*Key Words:",
         manuscript,
         flags=re.DOTALL,
     ).group(1).strip()
@@ -897,8 +910,8 @@ def main() -> None:
         "ea0838598796954c438af84da87719abb0fdf68949c74b4bddac74336097c0a0",
         "4fd3e6a3b01efc9413948fc3c354aca1e95df7020451631e9fb070d9d514bfeb",
         "b1948be27639b35a70b8f2a7a7eee6183277a6a5e3d291f2c16e08879211ee81",
-        "공백 포함 644자",
-        "공백 포함 1,239자",
+        "공백 포함 674자",
+        "공백 포함 1,498자",
         "Microsoft Word 계산 20쪽",
         "주민등록번호",
         "팀 검토 단계에서는 HWP를 만들지 않는다",
