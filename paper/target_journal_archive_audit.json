@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-07-26",
+  "official_domain": "ksoc.re.kr",
+  "robots": {
+    "url": "https://ksoc.re.kr/robots.txt",
+    "content_type": "text/plain",
+    "sha256": "c46dee547983f4738424944d9e4630076630e1fc0a747f2b733af2f6b9388742",
+    "sitemap_url": "https://ksoc.re.kr/user-sitemap"
+  },
+  "sitemap": {
+    "url": "https://ksoc.re.kr/user-sitemap",
+    "content_type": "text/xml",
+    "sha256": "f3d17e7d9696b654df22dc2c0c839bd129a6a00cd1764e5e78bd2d8ecd5c1039",
+    "page_count": 27,
+    "publication_url": "https://ksoc.re.kr/「범죄와-정책」발간물",
+    "raw_publication_location": "https://ksoc.re.kr/「범죄와-정책」발간물",
+    "raw_location_note": "Official sitemap location retained verbatim."
+  },
+  "publication_page": {
+    "url": "https://ksoc.re.kr/「범죄와-정책」발간물",
+    "content_type": "text/html",
+    "creatorlink_sid": "1545183",
+    "page_name": "「범죄와-정책」발간물",
+    "content_endpoint": "https://ksoc.re.kr/template/contents/sid/1545183/page/%E3%80%8C%EB%B2%94%EC%A3%84%EC%99%80-%EC%A0%95%EC%B1%85%E3%80%8D%EB%B0%9C%EA%B0%84%EB%AC%BC"
+  },
+  "content_endpoint": {
+    "url": "https://ksoc.re.kr/template/contents/sid/1545183/page/%E3%80%8C%EB%B2%94%EC%A3%84%EC%99%80-%EC%A0%95%EC%B1%85%E3%80%8D%EB%B0%9C%EA%B0%84%EB%AC%BC",
+    "content_type": "text/html",
+    "sha256": "5c95c9cd5b168a1e86a35a6932d843859bc765420525baecd9517fde360cddc1",
+    "response": {
+      "contents": [
+        {
+          "eltag": "",
+          "elcss": ""
+        }
+      ],
+      "blocks_type": [],
+      "initContent": "[{\"eltag\":\"\",\"elcss\":\"\"}]"
+    }
+  },
+  "finding": {
+    "official_archive_entries": 0,
+    "state": "EMPTY_OFFICIAL_PUBLICATION_PAGE",
+    "interpretation": "The official site exposes a publication page but no article entries; absence does not prove that no issues were published."
+  }
+}

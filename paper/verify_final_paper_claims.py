@@ -618,6 +618,38 @@ def main() -> None:
         }
     ]
 
+    target_journal_archive = json.loads(
+        (ROOT / "paper" / "target_journal_archive_audit.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert target_journal_archive["official_domain"] == "ksoc.re.kr"
+    assert target_journal_archive["robots"]["url"] == (
+        "https://ksoc.re.kr/robots.txt"
+    )
+    assert target_journal_archive["sitemap"]["url"] == (
+        "https://ksoc.re.kr/user-sitemap"
+    )
+    assert target_journal_archive["sitemap"]["publication_url"] == (
+        "https://ksoc.re.kr/「범죄와-정책」발간물"
+    )
+    assert target_journal_archive["publication_page"]["creatorlink_sid"] == (
+        "1545183"
+    )
+    assert target_journal_archive["content_endpoint"]["response"] == {
+        "contents": [{"eltag": "", "elcss": ""}],
+        "blocks_type": [],
+        "initContent": '[{"eltag":"","elcss":""}]',
+    }
+    assert target_journal_archive["finding"] == {
+        "official_archive_entries": 0,
+        "state": "EMPTY_OFFICIAL_PUBLICATION_PAGE",
+        "interpretation": (
+            "The official site exposes a publication page but no article "
+            "entries; absence does not prove that no issues were published."
+        ),
+    }
+
     review_packet = json.loads(
         (ROOT / "paper" / "overblocking_review_packet_77.json").read_text(
             encoding="utf-8"
@@ -822,7 +854,8 @@ def main() -> None:
 
     print(json.dumps(summary, ensure_ascii=False, indent=2, default=dict))
     print(
-        "\nLEGACY, POST-MUTATION, REPOSITORY-SCOPE, LAW, SERVICE-DOMAIN, 77-CASE "
+        "\nLEGACY, POST-MUTATION, REPOSITORY-SCOPE, TARGET-JOURNAL-ARCHIVE, "
+        "LAW, SERVICE-DOMAIN, 77-CASE "
         "REVIEW-PACKET, AND 13-SOURCE CITATION ASSERTIONS PASSED"
     )
 
