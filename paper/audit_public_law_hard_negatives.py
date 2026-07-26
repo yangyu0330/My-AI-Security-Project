@@ -13,10 +13,17 @@ the statutory text or detector-matched substrings.
 Run from the repository root:
 
     python paper/audit_public_law_hard_negatives.py
+    python paper/audit_public_law_hard_negatives.py --review
+
+The default output is aggregate-only and is suitable for automated comparison
+with ``public_law_hard_negative_audit.json``.  ``--review`` additionally emits
+only the 29 flagged public-law provisions, with stable case IDs and hashes, for
+independent human false-positive review.
 """
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import re
@@ -43,6 +50,12 @@ API_TEMPLATE = (
 )
 PROVISION_TAGS = {"조문내용", "항내용", "호내용", "목내용"}
 MIN_DOCUMENT_LENGTH = 20
+DIRECT_IDENTIFIER_PATTERNS = {
+    "email": re.compile(r"(?i)[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}"),
+    "phone": re.compile(r"(?<!\d)0\d{1,2}[- .]?\d{3,4}[- .]?\d{4}(?!\d)"),
+    "rrn": re.compile(r"(?<!\d)\d{6}[- ]?[1-8]\d{6}(?!\d)"),
+    "card": re.compile(r"(?<!\d)(?:\d[ -]?){13,19}(?!\d)"),
+}
 
 SOURCES = {
     "011357": {
@@ -121,19 +134,35 @@ def element_text(root: ET.Element, tag: str) -> str:
     return (element.text or "").strip() if element is not None else ""
 
 
-def extract_documents(root: ET.Element) -> list[str]:
-    """Extract unique substantive provision units in source order."""
-    documents: list[str] = []
+def extract_document_records(root: ET.Element) -> list[dict]:
+    """Extract unique substantive provision units with review locators."""
+    records: list[dict] = []
     seen: set[str] = set()
-    for element in root.iter():
-        if element.tag not in PROVISION_TAGS:
-            continue
-        text = re.sub(r"\s+", " ", element.text or "").strip()
-        if len(text) < MIN_DOCUMENT_LENGTH or text in seen:
-            continue
-        seen.add(text)
-        documents.append(text)
-    return documents
+    for unit in root.iter("조문단위"):
+        article_number = (unit.findtext("조문번호") or "").strip()
+        article_branch = (unit.findtext("조문가지번호") or "").strip()
+        article_title = (unit.findtext("조문제목") or "").strip()
+        for element in unit.iter():
+            if element.tag not in PROVISION_TAGS:
+                continue
+            text = re.sub(r"\s+", " ", element.text or "").strip()
+            if len(text) < MIN_DOCUMENT_LENGTH or text in seen:
+                continue
+            seen.add(text)
+            records.append(
+                {
+                    "tag": element.tag,
+                    "article_number": article_number,
+                    "article_branch": article_branch,
+                    "article_title": article_title,
+                    "text": text,
+                }
+            )
+    return records
+
+
+def extract_documents(root: ET.Element) -> list[str]:
+    return [record["text"] for record in extract_document_records(root)]
 
 
 def article_effective_dates(root: ET.Element, article_numbers: set[str]) -> dict[str, str]:
@@ -155,20 +184,53 @@ def load_legacy_layer0():
     return KoreanNormalizer(), KoreanPIIDetector()
 
 
-def audit_documents(documents: list[str], normalizer, detector) -> dict:
+def audit_documents(records: list[dict], normalizer, detector, include_review=False) -> dict:
     flagged_documents = 0
     finding_types: Counter[str] = Counter()
-    for document in documents:
+    review_rows: list[dict] = []
+    for ordinal, record in enumerate(records, 1):
+        document = record["text"]
         findings = detector.detect(normalizer.normalize(document))
         if findings:
             flagged_documents += 1
             finding_types.update(finding.pii_type for finding in findings)
-    return {
-        "documents": len(documents),
+            if include_review:
+                assert not any(
+                    pattern.search(document)
+                    for pattern in DIRECT_IDENTIFIER_PATTERNS.values()
+                ), "direct identifier-like pattern found in review text"
+                review_rows.append(
+                    {
+                        "document_ordinal": ordinal,
+                        "tag": record["tag"],
+                        "article_number": record["article_number"],
+                        "article_branch": record["article_branch"],
+                        "article_title": record["article_title"],
+                        "text_sha256": hashlib.sha256(
+                            document.encode("utf-8")
+                        ).hexdigest(),
+                        "finding_types": sorted(
+                            {finding.pii_type for finding in findings}
+                        ),
+                        "reason_codes": sorted(
+                            {
+                                finding.context_keyword
+                                for finding in findings
+                                if finding.context_keyword
+                            }
+                        ),
+                        "official_public_law_text": document,
+                    }
+                )
+    result = {
+        "documents": len(records),
         "flagged_documents": flagged_documents,
-        "flagged_document_rate": flagged_documents / len(documents),
+        "flagged_document_rate": flagged_documents / len(records),
         "finding_types": dict(sorted(finding_types.items())),
     }
+    if include_review:
+        result["review_rows"] = review_rows
+    return result
 
 
 def audit_explicit_hard_negative_fixtures(normalizer, detector) -> dict:
@@ -196,8 +258,20 @@ def audit_explicit_hard_negative_fixtures(normalizer, detector) -> dict:
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--review",
+        action="store_true",
+        help=(
+            "include the 29 flagged official-law provisions for independent "
+            "human review; default output remains aggregate-only"
+        ),
+    )
+    args = parser.parse_args()
+
     normalizer, detector = load_legacy_layer0()
     source_results: dict[str, dict] = {}
+    review_packet: list[dict] = []
     aggregate_documents = 0
     aggregate_flagged = 0
     aggregate_types: Counter[str] = Counter()
@@ -212,8 +286,22 @@ def main() -> None:
             "promulgation_number": element_text(root, "공포번호"),
             "overall_effective_date": element_text(root, "시행일자"),
         }
-        documents = extract_documents(root)
-        audit = audit_documents(documents, normalizer, detector)
+        records = extract_document_records(root)
+        audit = audit_documents(records, normalizer, detector, args.review)
+        if args.review:
+            for row in audit.pop("review_rows"):
+                review_packet.append(
+                    {
+                        "case_id": (
+                            f"law-{law_id}-document-"
+                            f"{row['document_ordinal']:04d}"
+                        ),
+                        "law_id": law_id,
+                        "law_title": metadata["title"],
+                        "official_api_url": API_TEMPLATE.format(law_id=law_id),
+                        **row,
+                    }
+                )
         result = {
             "official_api_url": API_TEMPLATE.format(law_id=law_id),
             **metadata,
@@ -288,6 +376,14 @@ def main() -> None:
             "financial, customer-support, or production traffic."
         ),
     }
+    if args.review:
+        assert len(review_packet) == 29
+        output["review_packet_notice"] = (
+            "Explicit review mode: the following text is official public-law "
+            "provision text, screened for email, phone, RRN, and card-like "
+            "patterns. Reviewers must label independently before adjudication."
+        )
+        output["review_packet"] = review_packet
     print(json.dumps(output, ensure_ascii=False, indent=2))
 
 
