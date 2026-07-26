@@ -480,6 +480,69 @@ def main() -> None:
         article: "20260122" for article in ("31", "33", "34", "35", "43")
     }
 
+    public_service_audit = json.loads(
+        (
+            ROOT / "paper" / "public_service_hard_negative_audit.json"
+        ).read_text(encoding="utf-8")
+    )
+    assert public_service_audit["corpus_sha256"] == (
+        "151fb6488a3e934dd467612e680bcae7319120a4acb50147b521d03bf31c3d3e"
+    )
+    assert len(public_service_audit["sources"]) == 21
+    assert len({source["id"] for source in public_service_audit["sources"]}) == 21
+    assert {
+        source["domain"] for source in public_service_audit["sources"]
+    } == {"medical", "finance", "support", "developer"}
+    assert public_service_audit["domains"] == {
+        "medical": {
+            "documents": 265,
+            "flagged_documents": 44,
+            "flagged_document_rate": 44 / 265,
+            "finding_types": {
+                "allergy": 1,
+                "course_grade": 1,
+                "diagnosis": 41,
+                "mental": 7,
+                "prescription": 4,
+            },
+            "duplicate_units_removed": 0,
+        },
+        "finance": {
+            "documents": 29,
+            "flagged_documents": 0,
+            "flagged_document_rate": 0.0,
+            "finding_types": {},
+            "duplicate_units_removed": 0,
+        },
+        "support": {
+            "documents": 144,
+            "flagged_documents": 0,
+            "flagged_document_rate": 0.0,
+            "finding_types": {},
+            "duplicate_units_removed": 5,
+        },
+        "developer": {
+            "documents": 255,
+            "flagged_documents": 4,
+            "flagged_document_rate": 4 / 255,
+            "finding_types": {"course_grade": 4},
+            "duplicate_units_removed": 0,
+        },
+    }
+    assert public_service_audit["aggregate"] == {
+        "documents": 693,
+        "flagged_documents": 48,
+        "flagged_document_rate": 48 / 693,
+        "finding_types": {
+            "allergy": 1,
+            "course_grade": 5,
+            "diagnosis": 41,
+            "mental": 7,
+            "prescription": 4,
+        },
+        "globally_unique_documents": 693,
+    }
+
     manuscript = (
         ROOT / "paper" / "범죄와정책_최종논문_검증반영.md"
     ).read_text(encoding="utf-8")
@@ -500,7 +563,11 @@ def main() -> None:
         "presidio.dataprivacystack.org/supported_entities/",
         "1,519개 중 29개(1.91%)",
         "조문별 시행일은 국가법령정보센터 공식 XML에서 모두 2026년 1월 22일",
-        "법률문서 단일 도메인",
+        "693개 중 48개(6.93%)",
+        "의료 265개 중 44개(16.60%)",
+        "개발문서 255개 중 4개(1.57%)",
+        "금융 29개와 AWS 지원문서 144개에서는 탐지가 없었다",
+        "서비스도메인_오탐_2인독립검토표.md",
     )
     for claim in required_manuscript_claims:
         assert claim in manuscript, claim
@@ -511,6 +578,7 @@ def main() -> None:
         "2026. 7. 21. 시행.",
         "# 생성형 AI의 한국어 민감정보 유출 위험과 정규화 기반 Layer 0의 필요성",
         "Korean Sensitive-Information Leakage Risks in Generative AI",
+        "서비스 도메인의 자연발생 hard negative가 여전히 필요하다",
     )
     for claim in forbidden_primary_claims:
         assert claim not in manuscript, claim
@@ -548,7 +616,7 @@ def main() -> None:
 
     print(json.dumps(summary, ensure_ascii=False, indent=2, default=dict))
     print(
-        "\nLEGACY AUDIT, POST-MUTATION CLAIMS, AND 13-SOURCE "
+        "\nLEGACY, POST-MUTATION, LAW, SERVICE-DOMAIN, AND 13-SOURCE "
         "CITATION ASSERTIONS PASSED"
     )
 

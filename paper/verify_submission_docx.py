@@ -66,6 +66,9 @@ def main():
         "A Lifestyle-Routine Activity Theory (LRAT) Approach",
         "presidio.dataprivacystack.org/supported_entities/",
         "1,519개 중 29개(1.91%)",
+        "693개 중 48개(6.93%)",
+        "의료 265개 중 44개(16.60%)",
+        "개발문서 255개 중 4개(1.57%)",
         "조문별 시행일은 국가법령정보센터 공식 XML에서 모두 2026년 1월 22일",
     )
     for claim in required_text:

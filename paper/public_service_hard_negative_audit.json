@@ -1,0 +1,210 @@
+{
+  "audit_date": "2026-07-26",
+  "scope": "official Korean public service-domain prose; navigation, contact metadata, direct identifier-like strings, and duplicates excluded",
+  "interpretation_limit": "The pages are authentic general guidance, not a probability sample of production traffic. Results estimate lexical overblocking on this fixed public corpus only.",
+  "corpus_sha256": "151fb6488a3e934dd467612e680bcae7319120a4acb50147b521d03bf31c3d3e",
+  "sources": [
+    {
+      "id": "medical-kdca-portal",
+      "domain": "medical",
+      "official_url": "https://health.kdca.go.kr/healthinfo/biz/health/intrcnYard/nationHlthinsPortalMain.do",
+      "eligible_text_sha256": "ad68ff54bc012df35cd7700897d9889d5cea003d14b1ffefc8be74b746b32cd7",
+      "eligible_units": 6
+    },
+    {
+      "id": "medical-kdca-exercise",
+      "domain": "medical",
+      "official_url": "https://health.kdca.go.kr/healthinfo/biz/health/gnrlzHealthInfo/gnrlzHealthInfo/gnrlzHealthInfoView.do?cntnts_sn=5293",
+      "eligible_text_sha256": "82b978f43bde5bc16b98ba0d3fd7d7714b4451981662b29e83caa5b21721f0d0",
+      "eligible_units": 152
+    },
+    {
+      "id": "medical-kdca-older-exercise",
+      "domain": "medical",
+      "official_url": "https://health.kdca.go.kr/healthinfo/biz/health/ntcnInfo/healthSourc/thtimtCntnts/thtimtCntntsView.do?thtimt_cntnts_sn=44",
+      "eligible_text_sha256": "b3fb42a93bfc3640fb779a7f137fac316327f0df0551ce0e3268d2d391cc8891",
+      "eligible_units": 12
+    },
+    {
+      "id": "medical-kdca-weight",
+      "domain": "medical",
+      "official_url": "https://health.kdca.go.kr/healthinfo/biz/health/ntcnInfo/healthSourc/thtimtCntnts/thtimtCntntsView.do?thtimt_cntnts_sn=65",
+      "eligible_text_sha256": "bf50242172cad005f3694435bbf46a1bb607f7612b11241a812c04482df24d75",
+      "eligible_units": 14
+    },
+    {
+      "id": "medical-kdca-checkup",
+      "domain": "medical",
+      "official_url": "https://health.kdca.go.kr/healthinfo/biz/health/ntcnInfo/healthSourc/thtimtCntnts/thtimtCntntsView.do?thtimt_cntnts_sn=7",
+      "eligible_text_sha256": "2fe37ebc241f38e83cf070dc99ed28a6947b2d5a85386a503435a5488536e3c3",
+      "eligible_units": 81
+    },
+    {
+      "id": "finance-fsc-deposit",
+      "domain": "finance",
+      "official_url": "https://www.fsc.go.kr/edu/cardnews?cnId=2259",
+      "eligible_text_sha256": "0a8f1135075abc88b5fab431723a9adeede27dedfbb8d6c68cb580d1612c7160",
+      "eligible_units": 3
+    },
+    {
+      "id": "finance-fsc-rates",
+      "domain": "finance",
+      "official_url": "https://www.fsc.go.kr/edu/cardnews?cnId=1008",
+      "eligible_text_sha256": "c1d1e463d5ddfef41cc6769c2fdc1e8125a4df7391873813df184a3c24ba351a",
+      "eligible_units": 1
+    },
+    {
+      "id": "finance-fsc-youth",
+      "domain": "finance",
+      "official_url": "https://www.fsc.go.kr/edu/cardnews?cnId=2133",
+      "eligible_text_sha256": "cb4bb3fa7a801ea41e10344a1662ee314e56806a98601c9be6df3285e9ddfafb",
+      "eligible_units": 5
+    },
+    {
+      "id": "finance-fsc-phishing",
+      "domain": "finance",
+      "official_url": "https://www.fsc.go.kr/no040101?cnId=525",
+      "eligible_text_sha256": "5aa5785eb37dc887edc96af436a59c937f2b4dac2086b62d0efdac7a10bc5de3",
+      "eligible_units": 5
+    },
+    {
+      "id": "finance-fsc-loan-fraud",
+      "domain": "finance",
+      "official_url": "https://www.fsc.go.kr/edu/cardnews?cnId=2313",
+      "eligible_text_sha256": "fb88b3e10d92195325d46144c8d6ae83f710609bc3038b5881ad7260ccb8fbf2",
+      "eligible_units": 4
+    },
+    {
+      "id": "finance-fsc-collection",
+      "domain": "finance",
+      "official_url": "https://www.fsc.go.kr/edu/cardnews?cnId=2326",
+      "eligible_text_sha256": "49f84d1e99f1288cdf84d82e2d0c689e162dd2382ef9ce62a6ced888376d5563",
+      "eligible_units": 2
+    },
+    {
+      "id": "finance-fsc-overseas-card",
+      "domain": "finance",
+      "official_url": "https://www.fsc.go.kr/edu/cardnews?cnId=2332",
+      "eligible_text_sha256": "59dc0afc44ac1379b924d90c540fa8dc64763af12a2257f7b20e156166ad3794",
+      "eligible_units": 5
+    },
+    {
+      "id": "finance-fsc-credit-score",
+      "domain": "finance",
+      "official_url": "https://www.fsc.go.kr/edu/cardnews?cnId=2299",
+      "eligible_text_sha256": "3bb92bb4d38dcb41dc2ca3703ebe45db642c187ef7294ec60af4de0f8dd8680d",
+      "eligible_units": 4
+    },
+    {
+      "id": "support-aws-plans",
+      "domain": "support",
+      "official_url": "https://docs.aws.amazon.com/ko_kr/awssupport/latest/user/aws-support-plans.html",
+      "eligible_text_sha256": "236d14e9867d7c6b27d3a94d553070cf3845e66ebcdb6394bab38c0629f5dc0c",
+      "eligible_units": 32
+    },
+    {
+      "id": "support-aws-access",
+      "domain": "support",
+      "official_url": "https://docs.aws.amazon.com/ko_kr/awssupport/latest/user/accessing-support.html",
+      "eligible_text_sha256": "9cfb67e1223b9a65df52d5ec685f3cb05b5dd0227b4e50c22fef767778697465",
+      "eligible_units": 57
+    },
+    {
+      "id": "support-aws-interaction",
+      "domain": "support",
+      "official_url": "https://docs.aws.amazon.com/ko_kr/awssupport/latest/user/create-support-interaction.html",
+      "eligible_text_sha256": "ef100490c24cceee6900457f305056af97937067df77af3410db189cd10d2381",
+      "eligible_units": 20
+    },
+    {
+      "id": "support-aws-cases",
+      "domain": "support",
+      "official_url": "https://docs.aws.amazon.com/ko_kr/awssupport/latest/user/monitoring-your-case.html",
+      "eligible_text_sha256": "d93cc6463973c736d5b5c82263a6bd0a4af969b2c1f0fbb2a384dd82e7b37ebe",
+      "eligible_units": 40
+    },
+    {
+      "id": "developer-python-introduction",
+      "domain": "developer",
+      "official_url": "https://docs.python.org/ko/3.13/tutorial/introduction.html",
+      "eligible_text_sha256": "d5977a5f392f2dece9ceb28e928b467ce49c7f633f2e33c223ec09c6aa2767c2",
+      "eligible_units": 54
+    },
+    {
+      "id": "developer-python-controlflow",
+      "domain": "developer",
+      "official_url": "https://docs.python.org/ko/3.13/tutorial/controlflow.html",
+      "eligible_text_sha256": "8a1c2aecee6452ca9f2a98a0043815a4a75ab7ca523414ced8e5ed1b6f0782db",
+      "eligible_units": 92
+    },
+    {
+      "id": "developer-python-datastructures",
+      "domain": "developer",
+      "official_url": "https://docs.python.org/ko/3.13/tutorial/datastructures.html",
+      "eligible_text_sha256": "d6536548ccdc985a2f8b96e177a92bb186605ada231456d5eb49de7822267129",
+      "eligible_units": 66
+    },
+    {
+      "id": "developer-python-errors",
+      "domain": "developer",
+      "official_url": "https://docs.python.org/ko/3.13/tutorial/errors.html",
+      "eligible_text_sha256": "aa280deb99fd4fe695af065155330849a64c7d7f32314363ecb4098f0ce8b277",
+      "eligible_units": 43
+    }
+  ],
+  "domains": {
+    "medical": {
+      "documents": 265,
+      "flagged_documents": 44,
+      "flagged_document_rate": 0.1660377358490566,
+      "finding_types": {
+        "allergy": 1,
+        "course_grade": 1,
+        "diagnosis": 41,
+        "mental": 7,
+        "prescription": 4
+      },
+      "duplicate_units_removed": 0
+    },
+    "finance": {
+      "documents": 29,
+      "flagged_documents": 0,
+      "flagged_document_rate": 0.0,
+      "finding_types": {},
+      "duplicate_units_removed": 0
+    },
+    "support": {
+      "documents": 144,
+      "flagged_documents": 0,
+      "flagged_document_rate": 0.0,
+      "finding_types": {},
+      "duplicate_units_removed": 5
+    },
+    "developer": {
+      "documents": 255,
+      "flagged_documents": 4,
+      "flagged_document_rate": 0.01568627450980392,
+      "finding_types": {
+        "course_grade": 4
+      },
+      "duplicate_units_removed": 0
+    }
+  },
+  "aggregate": {
+    "documents": 693,
+    "flagged_documents": 48,
+    "flagged_document_rate": 0.06926406926406926,
+    "finding_types": {
+      "allergy": 1,
+      "course_grade": 5,
+      "diagnosis": 41,
+      "mental": 7,
+      "prescription": 4
+    },
+    "globally_unique_documents": 693
+  },
+  "implementation_sha256": {
+    "normalizer": "528486063f7d67039d8afae595c944ebbdfd3b2e8dc39a526743c6310c824636",
+    "detector": "39bd487f5a75049d420a03d4da04f0de7a19a694a90a2c03e6b9f7e5af949c8d"
+  }
+}
