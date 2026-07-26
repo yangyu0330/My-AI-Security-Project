@@ -47,7 +47,7 @@ def main():
         assert abs(actual[key] - target) <= 2, (key, actual[key], target)
 
     assert len(document.sections) == 1
-    assert len(document.tables) == 8
+    assert len(document.tables) == 9
     assert document.core_properties.author == ""
     assert document.core_properties.last_modified_by == ""
 
@@ -59,12 +59,15 @@ def main():
         "성별·젠더 변수를 포함하지 않은 시스템 감사",
         "A Lifestyle-Routine Activity Theory (LRAT) Approach",
         "presidio.dataprivacystack.org/supported_entities/",
+        "1,519개 중 29개(1.91%)",
+        "조문별 시행일은 국가법령정보센터 공식 XML에서 모두 2026년 1월 22일",
     )
     for claim in required_text:
         assert claim in text, claim
 
     forbidden_text = (
         "변이 사례의 미차단율은 원형보다 3.93배",
+        "2026년 7월 21일 시행된 「인공지능 발전과 신뢰 기반 조성 등에 관한 기본법」",
         "**",
         "```",
     )
@@ -101,7 +104,7 @@ def main():
         "geometry_dxa": actual,
         "table_geometry": table_geometry,
         "structural_qa": "passed",
-        "word_page_count_external_check": 18,
+        "word_page_count_external_check": 19,
     }
     print(json.dumps(result, ensure_ascii=False, indent=2))
 

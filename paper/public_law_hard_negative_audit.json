@@ -1,0 +1,89 @@
+{
+  "audit_date": "2026-07-26",
+  "scope": "official statutory provision text; metadata, contacts, appendices, amendment reasons, and supplementary provisions excluded",
+  "extraction": {
+    "tags": [
+      "목내용",
+      "조문내용",
+      "항내용",
+      "호내용"
+    ],
+    "minimum_characters": 20,
+    "deduplication": "exact text within each law"
+  },
+  "sources": {
+    "011357": {
+      "official_api_url": "https://www.law.go.kr/DRF/lawService.do?OC=test&target=law&type=XML&ID=011357",
+      "title": "개인정보 보호법",
+      "promulgation_date": "20250401",
+      "promulgation_number": "20897",
+      "overall_effective_date": "20251002",
+      "xml_sha256": "d37c7d7d46ed639b7f6c0f6bdf0dea7cb5a1bde19d71f66df504ec502b080219",
+      "documents": 842,
+      "flagged_documents": 2,
+      "flagged_document_rate": 0.0023752969121140144,
+      "finding_types": {
+        "nationality": 2
+      }
+    },
+    "014820": {
+      "official_api_url": "https://www.law.go.kr/DRF/lawService.do?OC=test&target=law&type=XML&ID=014820",
+      "title": "인공지능 발전과 신뢰 기반 조성 등에 관한 기본법",
+      "promulgation_date": "20260120",
+      "promulgation_number": "21311",
+      "overall_effective_date": "20260122",
+      "xml_sha256": "7e0ce3b69ef1dac4c02342109f9488f3508a6971ed480e5e50876e522e150d1f",
+      "documents": 382,
+      "flagged_documents": 18,
+      "flagged_document_rate": 0.04712041884816754,
+      "finding_types": {
+        "dept": 18
+      }
+    },
+    "001444": {
+      "official_api_url": "https://www.law.go.kr/DRF/lawService.do?OC=test&target=law&type=XML&ID=001444",
+      "title": "대한민국헌법",
+      "promulgation_date": "19871029",
+      "promulgation_number": "00010",
+      "overall_effective_date": "19880225",
+      "xml_sha256": "c9d783b15ac8fe90c2573a06cdcf202173f1cbd374f963315e92afe1857483ef",
+      "documents": 295,
+      "flagged_documents": 9,
+      "flagged_document_rate": 0.030508474576271188,
+      "finding_types": {
+        "nationality": 9
+      }
+    }
+  },
+  "aggregate": {
+    "documents": 1519,
+    "flagged_documents": 29,
+    "flagged_document_rate": 0.019091507570770244,
+    "finding_types": {
+      "dept": 18,
+      "nationality": 11
+    }
+  },
+  "explicit_hard_negative_fixture_audit": {
+    "dataset": "synthetic explicit hard-negative fixtures; not a natural corpus",
+    "documents": 4,
+    "flagged_documents": 1,
+    "flagged_document_rate": 0.25,
+    "finding_types": {
+      "phone_kr": 1
+    },
+    "dataset_sha256": "41fbaa9046b08c61e160c182aa1b0f4e3a00204f93850888111d9eb793324d12"
+  },
+  "ai_basic_act_article_effective_dates": {
+    "31": "20260122",
+    "33": "20260122",
+    "34": "20260122",
+    "35": "20260122",
+    "43": "20260122"
+  },
+  "implementation_sha256": {
+    "normalizer": "528486063f7d67039d8afae595c944ebbdfd3b2e8dc39a526743c6310c824636",
+    "detector": "39bd487f5a75049d420a03d4da04f0de7a19a694a90a2c03e6b9f7e5af949c8d"
+  },
+  "interpretation_limit": "The statutory units are authentic public-law text and contain no case-level personal data, but they do not represent medical, financial, customer-support, or production traffic."
+}

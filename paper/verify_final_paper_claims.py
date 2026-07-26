@@ -462,6 +462,24 @@ def main() -> None:
         == 0
     )
 
+    public_law_audit = json.loads(
+        (ROOT / "paper" / "public_law_hard_negative_audit.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert public_law_audit["aggregate"] == {
+        "documents": 1519,
+        "flagged_documents": 29,
+        "flagged_document_rate": 29 / 1519,
+        "finding_types": {"dept": 18, "nationality": 11},
+    }
+    assert public_law_audit["explicit_hard_negative_fixture_audit"][
+        "flagged_documents"
+    ] == 1
+    assert public_law_audit["ai_basic_act_article_effective_dates"] == {
+        article: "20260122" for article in ("31", "33", "34", "35", "43")
+    }
+
     manuscript = (
         ROOT / "paper" / "범죄와정책_최종논문_검증반영.md"
     ).read_text(encoding="utf-8")
@@ -478,12 +496,17 @@ def main() -> None:
         "블라데미르 T. 콩고·여승준·최진혁",
         "대통령령 제36340호",
         "presidio.dataprivacystack.org/supported_entities/",
+        "1,519개 중 29개(1.91%)",
+        "조문별 시행일은 국가법령정보센터 공식 XML에서 모두 2026년 1월 22일",
+        "법률문서 단일 도메인",
     )
     for claim in required_manuscript_claims:
         assert claim in manuscript, claim
     forbidden_primary_claims = (
         "변이 사례의 미차단율은 원형보다 3.93배",
         "기존 계층이 놓친 999건",
+        "2026년 7월 21일 시행된 「인공지능 발전과 신뢰 기반 조성 등에 관한 기본법」",
+        "2026. 7. 21. 시행.",
     )
     for claim in forbidden_primary_claims:
         assert claim not in manuscript, claim
