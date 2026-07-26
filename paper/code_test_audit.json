@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-07-27",
+  "environment": {
+    "python": "3.12.10",
+    "pytest": "pytest 9.1.1",
+    "platform": "Windows"
+  },
+  "input_sha256": {
+    "PII/layer_0/korean_normalizer.py": "528486063f7d67039d8afae595c944ebbdfd3b2e8dc39a526743c6310c824636",
+    "PII/layer_0/korean_pii_detector.py": "39bd487f5a75049d420a03d4da04f0de7a19a694a90a2c03e6b9f7e5af949c8d",
+    "PII/layer_0/tests/test_detector.py": "46724e3ec264d015766feb23703a0836ef7190ebed6f95755ec37691a76810fc",
+    "PII/layer_0/tests/test_normalizer.py": "511e2b7be72f6fc005af57987c7b3466d321fbeb23c27b24425877efd57911f8",
+    "PII/fuzzer/korean_pii_fuzzer_v4.py": "733486b2af2746f7dd8da76fe6825d773915022d73103ac2b9128eb4edb422ef",
+    "PII/fuzzer/korean_pii_output_fuzzer_v4.py": "f2a2b0a390af30cf9f7aa1836b1b2ce868e7a7c2474cc26b205dd8a13bcb555c",
+    "PII/fuzzer/test_account_generation.py": "dec2c5cca9bc53219d71dddbc4155cc42fb99ef201a3fa55d71797de04a9d97f",
+    "PII/fuzzer/test_address_generation.py": "a08c30e3777ba47ed363287a7dd3bd52e3f8f938b45e264f63d0cbd7492c83b9",
+    "PII/fuzzer/test_medical_record_generation.py": "6a5272224c49293444602e922f7e2244244b091480b837bc7a3a6fedd5dff726",
+    "PII/fuzzer/test_name_generation.py": "c5aed031371332bd95ca01c4e63b8e94289baed53257f9126b1c3a07dbbaefb4",
+    "PII/fuzzer/test_prescription_generation.py": "2502f33098f44f6d4f4be8887c604b0830d56af8d15980a212218bd46dcd020d",
+    "PII/fuzzer/test_transaction_generation.py": "ab516eeeeaa150bc9c40af2ca0b32b01f5bafe6b16aa7b1e2395df47bb7818e7",
+    "korean_pii_guardrail_v0_2/pyproject.toml": "dff3ee557974a63c4d13f509e879e9bea2f31293f1a079b51d7c4308ae0336f5",
+    "korean_pii_guardrail_v0_2/tests/test_contract_smoke.py": "21367120b76b26e9646d194785d25a2ea2a946c5e281bbd1fc1d3c54cc95b1a9",
+    "paper/validation-requirements.txt": "a9f3fced70f5aebb365d3ff86995c02ac8a7e1b782e19e9dd92fc19a3ab78c77"
+  },
+  "suites": [
+    {
+      "id": "layer0",
+      "paths": [
+        "PII/layer_0/tests"
+      ],
+      "passed": 89,
+      "failed": 0,
+      "returncode": 0,
+      "failure_nodeids": []
+    },
+    {
+      "id": "fuzzer",
+      "paths": [
+        "PII/fuzzer/test_account_generation.py",
+        "PII/fuzzer/test_address_generation.py",
+        "PII/fuzzer/test_medical_record_generation.py",
+        "PII/fuzzer/test_name_generation.py",
+        "PII/fuzzer/test_prescription_generation.py",
+        "PII/fuzzer/test_transaction_generation.py"
+      ],
+      "passed": 34,
+      "failed": 8,
+      "returncode": 1,
+      "failure_nodeids": [
+        "PII/fuzzer/test_account_generation.py::AccountGenerationTests::test_output_fuzzer_emits_account_korean_mutations",
+        "PII/fuzzer/test_account_generation.py::AccountGenerationTests::test_single_pii_fuzzer_emits_account_korean_mutations",
+        "PII/fuzzer/test_medical_record_generation.py::MedicalRecordGenerationTests::test_input_fuzzer_emits_medical_record_korean_mutations",
+        "PII/fuzzer/test_medical_record_generation.py::MedicalRecordGenerationTests::test_output_fuzzer_emits_medical_record_korean_mutations",
+        "PII/fuzzer/test_prescription_generation.py::PrescriptionGenerationTests::test_input_fuzzer_prescription_payloads_are_marked_valid",
+        "PII/fuzzer/test_prescription_generation.py::PrescriptionGenerationTests::test_output_fuzzer_prescription_payloads_are_marked_valid",
+        "PII/fuzzer/test_transaction_generation.py::TransactionGenerationTests::test_input_fuzzer_emits_transaction_korean_mutations",
+        "PII/fuzzer/test_transaction_generation.py::TransactionGenerationTests::test_output_fuzzer_emits_transaction_korean_mutations"
+      ]
+    },
+    {
+      "id": "v0_2_contract",
+      "paths": [
+        "korean_pii_guardrail_v0_2/tests"
+      ],
+      "passed": 3,
+      "failed": 0,
+      "returncode": 0,
+      "failure_nodeids": []
+    }
+  ],
+  "totals": {
+    "passed": 126,
+    "failed": 8,
+    "tests": 134
+  },
+  "required_corpora_present": {
+    "PII/fuzzer/data/tagged_korean_names.jsonl": false,
+    "PII/fuzzer/data/tagged_korean_addresses.jsonl": false
+  },
+  "finding": {
+    "state": "CORE_TESTS_PASS_FUZZER_CORPORA_MISSING",
+    "core_layer0": "89/89 passed",
+    "v0_2_contract": "3/3 passed",
+    "fuzzer": "34 passed, 8 failed",
+    "failure_classification": "All eight failures stop at the required name-corpus guard because tagged_korean_names.jsonl is absent. The required address corpus is also absent and would block default evaluation after the name corpus is restored.",
+    "paper_impact": "The result supports the manuscript's disclosed limitation that the original generation pipeline is not cleanly reproducible; it does not contradict the separately recalculated audit of stored outputs or the passing Layer 0 detector and normalizer tests."
+  }
+}

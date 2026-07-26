@@ -544,6 +544,38 @@ def main() -> None:
         "globally_unique_documents": 693,
     }
 
+    code_test_audit = json.loads(
+        (ROOT / "paper" / "code_test_audit.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert code_test_audit["totals"] == {
+        "passed": 126,
+        "failed": 8,
+        "tests": 134,
+    }
+    assert [
+        (
+            suite["id"],
+            suite["passed"],
+            suite["failed"],
+            suite["returncode"],
+        )
+        for suite in code_test_audit["suites"]
+    ] == [
+        ("layer0", 89, 0, 0),
+        ("fuzzer", 34, 8, 1),
+        ("v0_2_contract", 3, 0, 0),
+    ]
+    assert code_test_audit["required_corpora_present"] == {
+        "PII/fuzzer/data/tagged_korean_names.jsonl": False,
+        "PII/fuzzer/data/tagged_korean_addresses.jsonl": False,
+    }
+    assert code_test_audit["finding"]["state"] == (
+        "CORE_TESTS_PASS_FUZZER_CORPORA_MISSING"
+    )
+    assert len(code_test_audit["suites"][1]["failure_nodeids"]) == 8
+
     repository_scope = json.loads(
         (ROOT / "paper" / "repository_scope_audit.json").read_text(
             encoding="utf-8"
@@ -920,7 +952,8 @@ def main() -> None:
 
     print(json.dumps(summary, ensure_ascii=False, indent=2, default=dict))
     print(
-        "\nLEGACY, POST-MUTATION, REPOSITORY-SCOPE, TARGET-JOURNAL-ARCHIVE, "
+        "\nLEGACY, POST-MUTATION, CODE-TEST, REPOSITORY-SCOPE, "
+        "TARGET-JOURNAL-ARCHIVE, "
         "KCI-CATALOG, LAW, SERVICE-DOMAIN, 77-CASE "
         "REVIEW-PACKET, AND 13-SOURCE CITATION ASSERTIONS PASSED"
     )
