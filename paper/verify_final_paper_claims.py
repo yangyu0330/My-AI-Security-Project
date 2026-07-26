@@ -11,6 +11,7 @@ file writes. It exits non-zero if a headline value differs from the manuscript.
 from __future__ import annotations
 
 import ast
+import hashlib
 import json
 import math
 import os
@@ -543,6 +544,59 @@ def main() -> None:
         "globally_unique_documents": 693,
     }
 
+    review_packet = json.loads(
+        (ROOT / "paper" / "overblocking_review_packet_77.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    review_cases = review_packet["cases"]
+    canonical_cases = json.dumps(
+        review_cases,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+    assert hashlib.sha256(canonical_cases.encode("utf-8")).hexdigest() == (
+        review_packet["case_set_sha256"]
+    )
+    assert review_packet["counts"] == {
+        "total": 77,
+        "law": 29,
+        "service": 48,
+        "medical": 44,
+        "developer": 4,
+    }
+    assert len(review_cases) == 77
+    assert len({case["case_id"] for case in review_cases}) == 77
+    assert Counter(case["corpus"] for case in review_cases) == {
+        "law": 29,
+        "service": 48,
+    }
+    assert Counter(case["domain"] for case in review_cases) == {
+        "public_law": 29,
+        "medical": 44,
+        "developer": 4,
+    }
+    for case in review_cases:
+        assert case["official_url"].startswith("https://")
+        assert hashlib.sha256(
+            case["official_public_text"].encode("utf-8")
+        ).hexdigest() == case["text_sha256"]
+        assert case["finding_types"]
+        assert case["reason_codes"]
+    review_form_pattern = re.compile(
+        r"(?m)^\|\s*((?:law|service)-[^| ]+)\s*\|\s*[^|]*\|\s*[^|]*\|\s*$"
+    )
+    for form_name in (
+        "과잉차단_검토자_A_독립판정표.md",
+        "과잉차단_검토자_B_독립판정표.md",
+    ):
+        form_text = (ROOT / "paper" / form_name).read_text(encoding="utf-8")
+        assert f"`{review_packet['case_set_sha256']}`" in form_text
+        form_ids = review_form_pattern.findall(form_text)
+        assert len(form_ids) == 77
+        assert set(form_ids) == {case["case_id"] for case in review_cases}
+
     manuscript = (
         ROOT / "paper" / "범죄와정책_최종논문_검증반영.md"
     ).read_text(encoding="utf-8")
@@ -568,6 +622,8 @@ def main() -> None:
         "개발문서 255개 중 4개(1.57%)",
         "금융 29개와 AWS 지원문서 144개에서는 탐지가 없었다",
         "서비스도메인_오탐_2인독립검토표.md",
+        "## 목 차",
+        "# ABSTRACT",
     )
     for claim in required_manuscript_claims:
         assert claim in manuscript, claim
@@ -582,6 +638,49 @@ def main() -> None:
     )
     for claim in forbidden_primary_claims:
         assert claim not in manuscript, claim
+    manuscript_order = (
+        "## 국문초록",
+        "## 목 차",
+        "# I. 서론",
+        "# 참고문헌",
+        "# ABSTRACT",
+    )
+    manuscript_positions = [manuscript.index(marker) for marker in manuscript_order]
+    assert manuscript_positions == sorted(manuscript_positions)
+    korean_abstract = re.search(
+        r"## 국문초록\s+(.+?)\s+\*\*주제어:",
+        manuscript,
+        flags=re.DOTALL,
+    ).group(1).strip()
+    english_abstract = re.search(
+        r"# ABSTRACT\s+## .+?\s+(.+?)\s+\*\*Key Words:",
+        manuscript,
+        flags=re.DOTALL,
+    ).group(1).strip()
+    assert 550 <= len(korean_abstract) <= 800
+    assert 1000 <= len(english_abstract) <= 1600
+    table_numbers = re.findall(r"\*\*<표 ([1-9])>[^*]+\*\*", manuscript)
+    assert table_numbers == [str(number) for number in range(1, 10)]
+    assert manuscript.count("\n자료:") == 9
+
+    submission_record = (
+        ROOT / "paper" / "범죄와정책_공식투고규격_원문검증기록.md"
+    ).read_text(encoding="utf-8")
+    required_submission_record_claims = (
+        "https://ksoc.re.kr/범죄와-정책-소개",
+        "https://ksoc.re.kr/편집규정",
+        "https://ksoc.re.kr/온라인-투고-시스템",
+        "ea0838598796954c438af84da87719abb0fdf68949c74b4bddac74336097c0a0",
+        "4fd3e6a3b01efc9413948fc3c354aca1e95df7020451631e9fb070d9d514bfeb",
+        "b1948be27639b35a70b8f2a7a7eee6183277a6a5e3d291f2c16e08879211ee81",
+        "공백 포함 644자",
+        "공백 포함 1,239자",
+        "Microsoft Word 계산 20쪽",
+        "주민등록번호",
+        "팀 검토 단계에서는 HWP를 만들지 않는다",
+    )
+    for claim in required_submission_record_claims:
+        assert claim in submission_record, claim
 
     citation_audit = json.loads(
         (ROOT / "paper" / "citation_source_audit.json").read_text(
@@ -616,8 +715,8 @@ def main() -> None:
 
     print(json.dumps(summary, ensure_ascii=False, indent=2, default=dict))
     print(
-        "\nLEGACY, POST-MUTATION, LAW, SERVICE-DOMAIN, AND 13-SOURCE "
-        "CITATION ASSERTIONS PASSED"
+        "\nLEGACY, POST-MUTATION, LAW, SERVICE-DOMAIN, 77-CASE "
+        "REVIEW-PACKET, AND 13-SOURCE CITATION ASSERTIONS PASSED"
     )
 
 

@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 
 from docx import Document
+from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml.ns import qn
 
 
@@ -47,13 +48,30 @@ def main():
         assert abs(actual[key] - target) <= 2, (key, actual[key], target)
 
     assert len(document.sections) == 1
-    assert len(document.tables) == 9
+    assert len(document.tables) == 10
     assert document.core_properties.author == ""
     assert document.core_properties.last_modified_by == ""
     assert document.core_properties.title == (
         "생성형 AI의 한국어 개인식별정보(PII) 유출 위험과 "
         "정규화 기반 Layer 0의 필요성"
     )
+    assert document.paragraphs[0].alignment == WD_ALIGN_PARAGRAPH.CENTER
+    assert document.paragraphs[0].runs[0].font.name == "HY견고딕"
+    assert document.paragraphs[0].runs[0].font.size.pt == 15.0
+    assert document.paragraphs[3].text == "민우"
+    assert document.paragraphs[3].alignment == WD_ALIGN_PARAGRAPH.RIGHT
+
+    paragraph_texts = [paragraph.text for paragraph in document.paragraphs]
+    required_order = ("〈요 약〉", "목 차", "I. 서론", "참고문헌", "ABSTRACT")
+    positions = [paragraph_texts.index(marker) for marker in required_order]
+    assert positions == sorted(positions), (required_order, positions)
+    korean_abstract = paragraph_texts[paragraph_texts.index("〈요 약〉") + 1]
+    english_abstract = paragraph_texts[paragraph_texts.index("ABSTRACT") + 2]
+    assert 550 <= len(korean_abstract) <= 800, len(korean_abstract)
+    assert 1000 <= len(english_abstract) <= 1600, len(english_abstract)
+    assert document.paragraphs[paragraph_texts.index("I. 서론") + 2].runs[
+        0
+    ].font.name == "HY신명조"
 
     required_text = (
         "생성형 AI의 한국어 개인식별정보(PII) 유출 위험과 정규화 기반 Layer 0의 필요성",
@@ -70,6 +88,8 @@ def main():
         "의료 265개 중 44개(16.60%)",
         "개발문서 255개 중 4개(1.57%)",
         "조문별 시행일은 국가법령정보센터 공식 XML에서 모두 2026년 1월 22일",
+        "<표 1> 저장소별 감사 기준과 역할",
+        "<표 9> Layer 0와 LLM 판별기의 지연시간",
     )
     for claim in required_text:
         assert claim in text, claim
@@ -90,6 +110,12 @@ def main():
         tbl_pr = table._tbl.tblPr
         tbl_w = tbl_pr.find(qn("w:tblW"))
         tbl_ind = tbl_pr.find(qn("w:tblInd"))
+        borders = tbl_pr.find(qn("w:tblBorders"))
+        assert borders is not None
+        for edge in ("top", "bottom", "insideH"):
+            assert borders.find(qn(f"w:{edge}")).get(qn("w:val")) == "single"
+        for edge in ("left", "right", "insideV"):
+            assert borders.find(qn(f"w:{edge}")).get(qn("w:val")) == "nil"
         grid_widths = [
             int(node.get(qn("w:w"))) for node in table._tbl.tblGrid.findall(qn("w:gridCol"))
         ]
@@ -115,7 +141,7 @@ def main():
         "geometry_dxa": actual,
         "table_geometry": table_geometry,
         "structural_qa": "passed",
-        "word_page_count_external_check": 19,
+        "word_page_count_external_check": 20,
     }
     print(json.dumps(result, ensure_ascii=False, indent=2))
 

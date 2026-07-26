@@ -3,13 +3,17 @@
 The output follows the geometry published in the Korean Society of Criminology's
 editorial rules: 208 x 277 mm, portrait; top 20 mm; bottom/left/right 15 mm;
 header/footer 15 mm. It intentionally remains a review copy because author
-identity, KCI similarity results, and the society's HWP template are external.
+identity, KCI similarity results, and the society's accepted final file format
+are external.
 """
 
 from __future__ import annotations
 
 import math
+import os
 import re
+import tempfile
+import zipfile
 from pathlib import Path
 
 from docx import Document
@@ -25,14 +29,44 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "paper" / "범죄와정책_최종논문_검증반영.md"
 OUTPUT = ROOT / "paper" / "범죄와정책_투고원고_검증본.docx"
 
-BODY_FONT = "바탕"
-HEADING_FONT = "맑은 고딕"
+BODY_FONT = "HY신명조"
+HEADING_FONT = "HY견고딕"
 MONO_FONT = "Consolas"
 BLACK = RGBColor(0, 0, 0)
 MUTED = RGBColor(90, 90, 90)
 HEADER_FILL = "E7E7E7"
 CONTENT_WIDTH_DXA = 9970
 TABLE_INDENT_DXA = 120
+
+
+def normalize_docx_archive(path: Path) -> None:
+    """Make the OOXML container byte-reproducible without changing its content."""
+    with tempfile.NamedTemporaryFile(
+        dir=path.parent,
+        prefix=f"{path.stem}.",
+        suffix=".tmp",
+        delete=False,
+    ) as handle:
+        normalized_path = Path(handle.name)
+    try:
+        with zipfile.ZipFile(path, "r") as source, zipfile.ZipFile(
+            normalized_path,
+            "w",
+        ) as target:
+            for source_info in sorted(source.infolist(), key=lambda item: item.filename):
+                target_info = zipfile.ZipInfo(
+                    source_info.filename,
+                    date_time=(1980, 1, 1, 0, 0, 0),
+                )
+                target_info.compress_type = source_info.compress_type
+                target_info.external_attr = source_info.external_attr
+                target_info.internal_attr = source_info.internal_attr
+                target_info.create_system = 0
+                target.writestr(target_info, source.read(source_info.filename))
+        os.replace(normalized_path, path)
+    finally:
+        if normalized_path.exists():
+            normalized_path.unlink()
 
 
 def set_font(run, name=BODY_FONT, size=9.6, bold=None, italic=None, color=BLACK):
@@ -114,10 +148,14 @@ def set_table_borders(table):
         if tag is None:
             tag = OxmlElement(f"w:{edge}")
             borders.append(tag)
-        tag.set(qn("w:val"), "single")
-        tag.set(qn("w:sz"), "4")
+        if edge in ("left", "right", "insideV"):
+            tag.set(qn("w:val"), "nil")
+            tag.set(qn("w:sz"), "0")
+        else:
+            tag.set(qn("w:val"), "single")
+            tag.set(qn("w:sz"), "8" if edge in ("top", "bottom") else "4")
         tag.set(qn("w:space"), "0")
-        tag.set(qn("w:color"), "777777")
+        tag.set(qn("w:color"), "000000")
 
 
 def display_len(text):
@@ -199,7 +237,7 @@ def add_inline(paragraph, text, size=9.6, color=BLACK):
         set_font(paragraph.add_run(text[cursor:]), size=size, color=color)
 
 
-def add_body_paragraph(doc, text, style=None, indent=True, size=9.6):
+def add_body_paragraph(doc, text, style=None, indent=True, size=10.0):
     p = doc.add_paragraph(style=style)
     p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
     p.paragraph_format.space_before = Pt(0)
@@ -216,12 +254,12 @@ def add_heading(doc, text, level):
     p = doc.add_paragraph(style=f"Heading {level}")
     p.paragraph_format.keep_with_next = True
     p.paragraph_format.keep_together = True
-    add_inline(p, text, size={1: 12.5, 2: 11.2, 3: 10.3}.get(level, 9.8))
+    add_inline(p, text, size={1: 14.0, 2: 12.0, 3: 11.0}.get(level, 10.0))
     for run in p.runs:
         set_font(
             run,
             name=HEADING_FONT,
-            size={1: 12.5, 2: 11.2, 3: 10.3}.get(level, 9.8),
+            size={1: 14.0, 2: 12.0, 3: 11.0}.get(level, 10.0),
             bold=True,
         )
     return p
@@ -287,15 +325,15 @@ def add_page_number(section):
 
 def configure_styles(doc):
     normal = doc.styles["Normal"]
-    set_style_font(normal, BODY_FONT, 9.6)
+    set_style_font(normal, BODY_FONT, 10.0)
     normal.paragraph_format.space_before = Pt(0)
     normal.paragraph_format.space_after = Pt(3)
     normal.paragraph_format.line_spacing = 1.38
 
     heading_tokens = {
-        1: (12.5, 12, 7),
-        2: (11.2, 9, 5),
-        3: (10.3, 7, 4),
+        1: (14.0, 12, 7),
+        2: (12.0, 9, 5),
+        3: (11.0, 7, 4),
     }
     for level, (size, before, after) in heading_tokens.items():
         style = doc.styles[f"Heading {level}"]
@@ -307,7 +345,7 @@ def configure_styles(doc):
 
     for name in ("List Bullet", "List Number"):
         style = doc.styles[name]
-        set_style_font(style, BODY_FONT, 9.6)
+        set_style_font(style, BODY_FONT, 10.0)
         style.paragraph_format.left_indent = Mm(7)
         style.paragraph_format.first_line_indent = Mm(-3.5)
         style.paragraph_format.space_after = Pt(2)
@@ -317,7 +355,7 @@ def configure_styles(doc):
         abstract = doc.styles.add_style("Journal Abstract", WD_STYLE_TYPE.PARAGRAPH)
     else:
         abstract = doc.styles["Journal Abstract"]
-    set_style_font(abstract, BODY_FONT, 9.0)
+    set_style_font(abstract, BODY_FONT, 10.0)
     abstract.paragraph_format.left_indent = Mm(5)
     abstract.paragraph_format.right_indent = Mm(5)
     abstract.paragraph_format.space_after = Pt(3)
@@ -376,7 +414,7 @@ def build():
             p.paragraph_format.space_before = Pt(5)
             p.paragraph_format.space_after = Pt(8)
             run = p.add_run(line[2:])
-            set_font(run, name=HEADING_FONT, size=18, bold=True)
+            set_font(run, name=HEADING_FONT, size=15, bold=True)
             title_count += 1
         elif line.startswith("## ") and title_count == 1 and not seen_main_body:
             p = doc.add_paragraph()
@@ -396,10 +434,42 @@ def build():
             title_count += 1
         elif line.startswith("# "):
             text = line[2:]
-            in_abstract = text in ("국문초록", "Abstract")
-            add_heading(doc, text, 1)
+            in_abstract = text in ("국문초록", "Abstract", "ABSTRACT")
+            if in_abstract:
+                p = doc.add_paragraph()
+                p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                p.paragraph_format.space_before = Pt(10)
+                p.paragraph_format.space_after = Pt(7)
+                run = p.add_run(text)
+                set_font(run, name=BODY_FONT, size=13.0, bold=True)
+            else:
+                add_heading(doc, text, 1)
         elif line.startswith("## "):
-            add_heading(doc, line[3:], 2)
+            text = line[3:]
+            if text == "국문초록":
+                in_abstract = True
+                p = doc.add_paragraph()
+                p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                p.paragraph_format.space_before = Pt(10)
+                p.paragraph_format.space_after = Pt(7)
+                run = p.add_run("〈요 약〉")
+                set_font(run, name=BODY_FONT, size=13.0, bold=True)
+            elif text == "목 차":
+                in_abstract = False
+                p = doc.add_paragraph()
+                p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                p.paragraph_format.space_before = Pt(8)
+                p.paragraph_format.space_after = Pt(5)
+                run = p.add_run(text)
+                set_font(run, name=HEADING_FONT, size=11.0, bold=True)
+            elif in_abstract and text.startswith("*Korean "):
+                p = doc.add_paragraph()
+                p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                p.paragraph_format.space_after = Pt(5)
+                run = p.add_run(text.strip("*"))
+                set_font(run, name=BODY_FONT, size=13.0, bold=True)
+            else:
+                add_heading(doc, text, 2)
         elif line.startswith("### "):
             add_heading(doc, line[4:], 3)
         elif line.startswith("#### "):
@@ -410,16 +480,27 @@ def build():
             add_body_paragraph(doc, re.sub(r"^\d+\.\s+", "", line), style="List Number", indent=False)
         elif not seen_main_body and line.startswith("**민우"):
             p = doc.add_paragraph()
-            p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
             p.paragraph_format.space_after = Pt(2)
-            add_inline(p, line, size=11)
+            add_inline(p, line, size=11.0)
         elif not seen_main_body:
             p = doc.add_paragraph()
-            p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
             p.paragraph_format.space_after = Pt(2)
             add_inline(p, line, size=8.8, color=MUTED)
-        elif in_abstract or line.startswith("**주제어:**") or line.startswith("**Keywords:**"):
-            add_body_paragraph(doc, line, style="Journal Abstract", indent=False, size=9.0)
+        elif re.match(r"^\*\*<표 \d+>", line):
+            p = doc.add_paragraph()
+            p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            p.paragraph_format.space_before = Pt(5)
+            p.paragraph_format.space_after = Pt(3)
+            add_inline(p, line, size=10.0)
+            for run in p.runs:
+                set_font(run, name=HEADING_FONT, size=10.0, bold=True)
+        elif line.startswith("자료:"):
+            p = add_body_paragraph(doc, line, indent=False, size=8.5)
+            p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+        elif in_abstract or line.startswith("**주제어:**") or line.startswith("**Keywords:**") or line.startswith("**Key Words:**"):
+            add_body_paragraph(doc, line, style="Journal Abstract", indent=False, size=10.0)
         else:
             add_body_paragraph(doc, line)
         idx += 1
@@ -434,6 +515,7 @@ def build():
     core.author = ""
     core.last_modified_by = ""
     doc.save(OUTPUT)
+    normalize_docx_archive(OUTPUT)
     print(OUTPUT)
 
 
