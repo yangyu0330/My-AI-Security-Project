@@ -484,6 +484,8 @@ def main() -> None:
         ROOT / "paper" / "범죄와정책_최종논문_검증반영.md"
     ).read_text(encoding="utf-8")
     required_manuscript_claims = (
+        "# 생성형 AI의 한국어 개인식별정보(PII) 유출 위험과 정규화 기반 Layer 0의 필요성",
+        "Korean Personally Identifiable Information Leakage Risks in Generative AI",
         "9,964건(99.64%)",
         "2,060건(20.67%)",
         "706건(7.09%)",
@@ -507,12 +509,48 @@ def main() -> None:
         "기존 계층이 놓친 999건",
         "2026년 7월 21일 시행된 「인공지능 발전과 신뢰 기반 조성 등에 관한 기본법」",
         "2026. 7. 21. 시행.",
+        "# 생성형 AI의 한국어 민감정보 유출 위험과 정규화 기반 Layer 0의 필요성",
+        "Korean Sensitive-Information Leakage Risks in Generative AI",
     )
     for claim in forbidden_primary_claims:
         assert claim not in manuscript, claim
 
+    citation_audit = json.loads(
+        (ROOT / "paper" / "citation_source_audit.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    academic_sources = citation_audit["sources"]
+    assert len(academic_sources) == 13
+    assert len({source["id"] for source in academic_sources}) == 13
+    assert {source["id"] for source in academic_sources} == {
+        *(f"K{number}" for number in range(1, 6)),
+        *(f"F{number}" for number in range(1, 9)),
+    }
+    manuscript_body, reference_list = manuscript.split("# 참고문헌", 1)
+    for source in academic_sources:
+        assert source["citation_marker"] in manuscript_body, source["id"]
+        assert source["reference_marker"] in reference_list, source["id"]
+        assert source["record"].startswith("https://"), source["id"]
+    dois = [
+        source["doi"] for source in academic_sources if source["doi"] is not None
+    ]
+    assert len(dois) == len(set(dois)) == 9
+    assert citation_audit["result"] == {
+        "academic_references": 13,
+        "korean": 5,
+        "international": 8,
+        "unique_ids": 13,
+        "all_have_primary_or_authoritative_records": True,
+        "all_have_in_text_citation_markers": True,
+        "all_have_reference_list_markers": True,
+    }
+
     print(json.dumps(summary, ensure_ascii=False, indent=2, default=dict))
-    print("\nLEGACY AUDIT AND POST-MUTATION MANUSCRIPT ASSERTIONS PASSED")
+    print(
+        "\nLEGACY AUDIT, POST-MUTATION CLAIMS, AND 13-SOURCE "
+        "CITATION ASSERTIONS PASSED"
+    )
 
 
 if __name__ == "__main__":

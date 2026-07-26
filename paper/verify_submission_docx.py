@@ -50,8 +50,14 @@ def main():
     assert len(document.tables) == 9
     assert document.core_properties.author == ""
     assert document.core_properties.last_modified_by == ""
+    assert document.core_properties.title == (
+        "생성형 AI의 한국어 개인식별정보(PII) 유출 위험과 "
+        "정규화 기반 Layer 0의 필요성"
+    )
 
     required_text = (
+        "생성형 AI의 한국어 개인식별정보(PII) 유출 위험과 정규화 기반 Layer 0의 필요성",
+        "Korean Personally Identifiable Information Leakage Risks in Generative AI",
         "9,964건(99.64%)",
         "1,354건",
         "9.12%에서 18.75%",
@@ -68,6 +74,8 @@ def main():
     forbidden_text = (
         "변이 사례의 미차단율은 원형보다 3.93배",
         "2026년 7월 21일 시행된 「인공지능 발전과 신뢰 기반 조성 등에 관한 기본법」",
+        "생성형 AI의 한국어 민감정보 유출 위험과 정규화 기반 Layer 0의 필요성",
+        "Korean Sensitive-Information Leakage Risks in Generative AI",
         "**",
         "```",
     )

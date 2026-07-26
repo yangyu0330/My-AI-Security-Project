@@ -1,0 +1,146 @@
+{
+  "audit_date": "2026-07-26",
+  "scope": "All 13 academic works cited in the final manuscript; official KCI, publisher, government-library, or author/public-institution full-text records",
+  "interpretation_rule": "Existence and bibliographic identity are checked separately from claim support. Where only an abstract or publisher metadata was accessible, the manuscript does not attribute detailed results beyond that accessible text.",
+  "sources": [
+    {
+      "id": "K1",
+      "title": "청소년의 일상적 생활양식이 사이버범죄피해에 미치는 영향",
+      "year": 2017,
+      "record": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART002266611",
+      "doi": "10.22816/polsci.2017.17.3.006",
+      "verification_level": "KCI bibliography and abstract",
+      "citation_marker": "박기태·조제성, 2017",
+      "reference_marker": "박기태·조제성. (2017). 청소년의 일상적 생활양식이 사이버범죄피해에 미치는 영향."
+    },
+    {
+      "id": "K2",
+      "title": "A Lifestyle-Routine Activity Theory (LRAT) Approach to Cybercrime Victimization: An Empirical Assessment of SNS Lifestyle Exposure Activities",
+      "year": 2020,
+      "record": "https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=ART002575590",
+      "doi": "10.14329/apjis.2020.30.1.53",
+      "verification_level": "KCI bibliography and abstract",
+      "citation_marker": "서지혜·최진선·박진수, 2020",
+      "reference_marker": "서지혜·최진선·박진수. (2020). A Lifestyle-Routine Activity Theory (LRAT) Approach to Cybercrime Victimization"
+    },
+    {
+      "id": "K3",
+      "title": "사이버 공간에서의 일상활동과 범죄피해",
+      "year": 2011,
+      "record": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART001590693",
+      "doi": null,
+      "verification_level": "KCI bibliography and abstract",
+      "citation_marker": "이윤호·김도우·유영재, 2011",
+      "reference_marker": "이윤호·김도우·유영재. (2011). 사이버 공간에서의 일상활동과 범죄피해."
+    },
+    {
+      "id": "K4",
+      "title": "온라인 괴롭힘 반복피해의 영향 요인에 관한 연구: 생활양식-일상활동 이론을 중심으로",
+      "year": 2025,
+      "record": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART003199010",
+      "doi": null,
+      "verification_level": "KCI bibliography and abstract",
+      "citation_marker": "노희주·조윤오, 2025",
+      "reference_marker": "노희주·조윤오. (2025). 온라인 괴롭힘 반복피해의 영향 요인에 관한 연구"
+    },
+    {
+      "id": "K5",
+      "title": "Applying Routine Activity Theory To Cybercrime: Revisiting ‘VIVA’ Model",
+      "year": 2025,
+      "record": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART003182432",
+      "doi": null,
+      "verification_level": "KCI bibliography and abstract",
+      "citation_marker": "블라데미르 T. 콩고·여승준·최진혁, 2025",
+      "reference_marker": "블라데미르 T. 콩고·여승준·최진혁. (2025). Applying Routine Activity Theory To Cybercrime"
+    },
+    {
+      "id": "F1",
+      "title": "“Situational” Crime Prevention: Theory and Practice",
+      "year": 1980,
+      "record": "https://academic.oup.com/bjc/article-abstract/20/2/136/356435",
+      "doi": "10.1093/oxfordjournals.bjc.a047153",
+      "verification_level": "publisher bibliography",
+      "citation_marker": "Clarke, 1980",
+      "reference_marker": "Clarke, R. V. (1980). “Situational” Crime Prevention: Theory and Practice."
+    },
+    {
+      "id": "F2",
+      "title": "Situational Crime Prevention: Its Theoretical Basis and Practical Scope",
+      "year": 1983,
+      "record": "https://www.journals.uchicago.edu/doi/10.1086/449090",
+      "doi": "10.1086/449090",
+      "verification_level": "publisher bibliography and abstract",
+      "citation_marker": "Clarke, 1980; 1983",
+      "reference_marker": "Clarke, R. V. (1983). Situational Crime Prevention: Its Theoretical Basis and Practical Scope."
+    },
+    {
+      "id": "F3",
+      "title": "Social Change and Crime Rate Trends: A Routine Activity Approach",
+      "year": 1979,
+      "record": "https://www.ojp.gov/ncjrs/virtual-library/abstracts/social-change-and-crime-rate-trends-routine-activity-approach",
+      "doi": "10.2307/2094589",
+      "verification_level": "U.S. Department of Justice bibliography and abstract",
+      "citation_marker": "Cohen과 Felson(1979)",
+      "reference_marker": "Cohen, L. E., & Felson, M. (1979). Social Change and Crime Rate Trends"
+    },
+    {
+      "id": "F4",
+      "title": "Opportunity Makes the Thief: Practical Theory for Crime Prevention",
+      "year": 1998,
+      "record": "https://popcenter.asu.edu/sites/g/files/litvpz3631/files/opportunity_makes_the_thief.pdf",
+      "doi": null,
+      "verification_level": "public-institution full text",
+      "citation_marker": "Felson & Clarke, 1998",
+      "reference_marker": "Felson, M., & Clarke, R. V. (1998). *Opportunity Makes the Thief"
+    },
+    {
+      "id": "F5",
+      "title": "Applying Routine Activity Theory to Cybercrime: A Theoretical and Empirical Analysis",
+      "year": 2016,
+      "record": "https://www.tandfonline.com/doi/full/10.1080/01639625.2015.1012409",
+      "doi": "10.1080/01639625.2015.1012409",
+      "verification_level": "publisher full text",
+      "citation_marker": "Leukfeldt와 Yar(2016)",
+      "reference_marker": "Leukfeldt, E. R., & Yar, M. (2016). Applying Routine Activity Theory to Cybercrime"
+    },
+    {
+      "id": "F6",
+      "title": "Crime Prevention and the Displacement Phenomenon",
+      "year": 1976,
+      "record": "https://journals.sagepub.com/doi/10.1177/001112877602200204",
+      "doi": "10.1177/001112877602200204",
+      "verification_level": "publisher bibliography and abstract",
+      "citation_marker": "Reppetto(1976)",
+      "reference_marker": "Reppetto, T. A. (1976). Crime Prevention and the Displacement Phenomenon."
+    },
+    {
+      "id": "F7",
+      "title": "Guardians Upon High: An Application of Routine Activities Theory to Online Identity Theft in Europe at the Country and Individual Level",
+      "year": 2016,
+      "record": "https://academic.oup.com/bjc/article/56/1/21/2462277",
+      "doi": "10.1093/bjc/azv011",
+      "verification_level": "publisher full text",
+      "citation_marker": "Williams(2016)",
+      "reference_marker": "Williams, M. L. (2016). Guardians Upon High"
+    },
+    {
+      "id": "F8",
+      "title": "The Novelty of “Cybercrime”: An Assessment in Light of Routine Activity Theory",
+      "year": 2005,
+      "record": "https://journals.sagepub.com/doi/abs/10.1177/147737080556056",
+      "doi": "10.1177/147737080556056",
+      "verification_level": "publisher bibliography and abstract",
+      "citation_marker": "Yar(2005)",
+      "reference_marker": "Yar, M. (2005). The Novelty of “Cybercrime”"
+    }
+  ],
+  "result": {
+    "academic_references": 13,
+    "korean": 5,
+    "international": 8,
+    "unique_ids": 13,
+    "all_have_primary_or_authoritative_records": true,
+    "all_have_in_text_citation_markers": true,
+    "all_have_reference_list_markers": true
+  }
+}

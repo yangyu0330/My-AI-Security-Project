@@ -425,7 +425,10 @@ def build():
         idx += 1
 
     core = doc.core_properties
-    core.title = "생성형 AI의 한국어 민감정보 유출 위험과 정규화 기반 Layer 0의 필요성"
+    core.title = (
+        "생성형 AI의 한국어 개인식별정보(PII) 유출 위험과 "
+        "정규화 기반 Layer 0의 필요성"
+    )
     core.subject = "「범죄와 정책」 투고 검증본"
     core.keywords = "생성형 인공지능, 개인정보, 가드레일, Layer 0, 형사정책"
     core.author = ""
