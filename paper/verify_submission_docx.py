@@ -76,6 +76,8 @@ def main():
     required_text = (
         "생성형 AI의 한국어 개인식별정보(PII) 유출 위험과 정규화 기반 Layer 0의 필요성",
         "Korean Personally Identifiable Information Leakage Risks in Generative AI",
+        "원고 작성·최종 자동검증 기준일: 2026년 7월 27일",
+        "694ca717dd47e3d8f229bfa4da84c1fad607576b",
         "9,964건(99.64%)",
         "1,354건",
         "9.12%에서 18.75%",

@@ -783,6 +783,11 @@ def main() -> None:
     manuscript = (
         ROOT / "paper" / "범죄와정책_최종논문_검증반영.md"
     ).read_text(encoding="utf-8")
+    assert "원고 작성·최종 자동검증 기준일: 2026년 7월 27일" in manuscript
+    assert (
+        "commit `694ca717dd47e3d8f229bfa4da84c1fad607576b`"
+        in manuscript
+    )
     required_manuscript_claims = (
         "# 생성형 AI의 한국어 개인식별정보(PII) 유출 위험과 정규화 기반 Layer 0의 필요성",
         "Korean Personally Identifiable Information Leakage Risks in Generative AI",
