@@ -28,6 +28,7 @@ from docx.shared import Mm, Pt, RGBColor
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "paper" / "범죄와정책_최종논문_검증반영.md"
 OUTPUT = ROOT / "paper" / "범죄와정책_투고원고_검증본.docx"
+ANONYMOUS_OUTPUT = ROOT / "paper" / "범죄와정책_심사용_익명원고_최종.docx"
 
 BODY_FONT = "HY신명조"
 HEADING_FONT = "HY견고딕"
@@ -39,7 +40,7 @@ CONTENT_WIDTH_DXA = 9970
 TABLE_INDENT_DXA = 120
 
 
-def normalize_docx_archive(path: Path) -> None:
+def normalize_docx_archive(path: Path, scrub_metadata: bool = False) -> None:
     """Make the OOXML container byte-reproducible without changing its content."""
     with tempfile.NamedTemporaryFile(
         dir=path.parent,
@@ -54,6 +55,8 @@ def normalize_docx_archive(path: Path) -> None:
             "w",
         ) as target:
             for source_info in sorted(source.infolist(), key=lambda item: item.filename):
+                if scrub_metadata and source_info.filename == "docProps/custom.xml":
+                    continue
                 target_info = zipfile.ZipInfo(
                     source_info.filename,
                     date_time=(1980, 1, 1, 0, 0, 0),
@@ -62,7 +65,26 @@ def normalize_docx_archive(path: Path) -> None:
                 target_info.external_attr = source_info.external_attr
                 target_info.internal_attr = source_info.internal_attr
                 target_info.create_system = 0
-                target.writestr(target_info, source.read(source_info.filename))
+                data = source.read(source_info.filename)
+                if scrub_metadata and source_info.filename.endswith(".xml"):
+                    data = re.sub(rb' w:rsid[A-Za-z0-9]+="[^"]*"', b"", data)
+                    if source_info.filename == "docProps/core.xml":
+                        data = re.sub(
+                            rb"<dc:creator>.*?</dc:creator>",
+                            b"<dc:creator></dc:creator>",
+                            data,
+                        )
+                        data = re.sub(
+                            rb"<cp:lastModifiedBy>.*?</cp:lastModifiedBy>",
+                            b"<cp:lastModifiedBy></cp:lastModifiedBy>",
+                            data,
+                        )
+                        data = re.sub(
+                            rb"<dc:description>.*?</dc:description>",
+                            b"<dc:description></dc:description>",
+                            data,
+                        )
+                target.writestr(target_info, data)
         os.replace(normalized_path, path)
     finally:
         if normalized_path.exists():
@@ -250,6 +272,27 @@ def add_body_paragraph(doc, text, style=None, indent=True, size=10.0):
     return p
 
 
+def add_numbered_paragraph(doc, text):
+    """Render the source number literally so each independent list can restart."""
+    p = add_body_paragraph(doc, text, indent=False)
+    p.paragraph_format.left_indent = Mm(7)
+    p.paragraph_format.first_line_indent = Mm(-3.5)
+    p.paragraph_format.space_after = Pt(2)
+    p.paragraph_format.line_spacing = 1.30
+    return p
+
+
+def add_bulleted_paragraph(doc, text):
+    """Use a literal bullet to avoid compatibility-mode list reflow defects."""
+    p = add_body_paragraph(doc, f"• {text}", indent=False)
+    p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+    p.paragraph_format.left_indent = Mm(7)
+    p.paragraph_format.first_line_indent = Mm(-3.5)
+    p.paragraph_format.space_after = Pt(2)
+    p.paragraph_format.line_spacing = 1.30
+    return p
+
+
 def add_heading(doc, text, level):
     p = doc.add_paragraph(style=f"Heading {level}")
     p.paragraph_format.keep_with_next = True
@@ -375,13 +418,52 @@ def configure_page(doc):
     add_page_number(section)
 
 
-def build():
-    lines = SOURCE.read_text(encoding="utf-8").splitlines()
+def prepare_lines(lines, anonymous):
+    if not anonymous:
+        return lines
+
+    omitted = {
+        "**민우**",
+        "정보보안학과·CCIT 융합전공",
+        "원고 작성·최종 자동검증 기준일: 2026년 7월 30일",
+        "검증 대상 코드: `KPIIGD/My-AI-Security-Project`, commit `694ca717dd47e3d8f229bfa4da84c1fad607576b`",
+    }
+    replacements = {
+        "본 연구는 KPIIGD 조직의 네 저장소와 로컬 개인 포크를 검토하였다.": (
+            "본 연구는 네 저장소와 로컬 검증 복제본을 검토하였다. "
+            "익명 심사를 위해 저장소 명칭과 공개 링크는 게재 확정 후 제시한다."
+        ),
+        "| `KPIIGD/My-AI-Security-Project` | `694ca717dd47` | 코드·10,000건 데이터·저장 실험 결과 |": (
+            "| 저장소 A | 익명 검증본 | 코드·10,000건 데이터·저장 실험 결과 |"
+        ),
+        "| `KPIIGD/My-AI-Security-Project-internal` | `6e9c6beef29d` | 논문 목차·내부 검증문서 |": (
+            "| 저장소 B | 익명 검증본 | 논문 목차·내부 검증문서 |"
+        ),
+        "| `KPIIGD/My-AI-Security-Project-data` | `cc6288d0d868` | 약한 라벨 큐레이션 결과 |": (
+            "| 저장소 C | 익명 검증본 | 약한 라벨 큐레이션 결과 |"
+        ),
+        "| `KPIIGD/ai-security-kb` | `72f8eb17a38c` | 지식베이스·과거 실험 기록 |": (
+            "| 저장소 D | 익명 검증본 | 지식베이스·과거 실험 기록 |"
+        ),
+    }
+    result = []
+    for line in lines:
+        if line in omitted:
+            continue
+        result.append(replacements.get(line, line))
+    return result
+
+
+def build(output=OUTPUT, anonymous=False):
+    source_lines = SOURCE.read_text(encoding="utf-8").splitlines()
+    lines = prepare_lines(source_lines, anonymous)
     doc = Document()
     configure_page(doc)
     configure_styles(doc)
 
     in_abstract = False
+    in_english_abstract = False
+    in_references = False
     seen_main_body = False
     title_count = 0
     idx = 0
@@ -413,7 +495,8 @@ def build():
             p.alignment = WD_ALIGN_PARAGRAPH.CENTER
             p.paragraph_format.space_before = Pt(5)
             p.paragraph_format.space_after = Pt(8)
-            run = p.add_run(line[2:])
+            title_text = line[2:].replace("Layer 0의", "Layer\u00a00의")
+            run = p.add_run(title_text)
             set_font(run, name=HEADING_FONT, size=15, bold=True)
             title_count += 1
         elif line.startswith("## ") and title_count == 1 and not seen_main_body:
@@ -435,6 +518,11 @@ def build():
         elif line.startswith("# "):
             text = line[2:]
             in_abstract = text in ("국문초록", "Abstract", "ABSTRACT")
+            in_english_abstract = text == "ABSTRACT"
+            if text == "참 고 문 헌":
+                in_references = True
+            elif in_abstract:
+                in_references = False
             if in_abstract:
                 p = doc.add_paragraph()
                 p.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -442,8 +530,18 @@ def build():
                 p.paragraph_format.space_after = Pt(7)
                 run = p.add_run(text)
                 set_font(run, name=BODY_FONT, size=13.0, bold=True)
+            elif text == "참 고 문 헌":
+                p = doc.add_paragraph()
+                p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                p.paragraph_format.space_before = Pt(10)
+                p.paragraph_format.space_after = Pt(7)
+                p.paragraph_format.keep_with_next = True
+                run = p.add_run(text)
+                set_font(run, name=HEADING_FONT, size=14.0, bold=True)
             else:
-                add_heading(doc, text, 1)
+                p = add_heading(doc, text, 1)
+                if text == "Ⅰ. 서론":
+                    p.paragraph_format.page_break_before = True
         elif line.startswith("## "):
             text = line[3:]
             if text == "국문초록":
@@ -475,9 +573,9 @@ def build():
         elif line.startswith("#### "):
             add_heading(doc, line[5:], 3)
         elif line.startswith("- "):
-            add_body_paragraph(doc, line[2:], style="List Bullet", indent=False)
+            add_bulleted_paragraph(doc, line[2:])
         elif re.match(r"^\d+\.\s+", line):
-            add_body_paragraph(doc, re.sub(r"^\d+\.\s+", "", line), style="List Number", indent=False)
+            add_numbered_paragraph(doc, line)
         elif not seen_main_body and line.startswith("**민우"):
             p = doc.add_paragraph()
             p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
@@ -500,9 +598,26 @@ def build():
             p = add_body_paragraph(doc, line, indent=False, size=8.5)
             p.alignment = WD_ALIGN_PARAGRAPH.LEFT
         elif in_abstract or line.startswith("**주제어:**") or line.startswith("**Keywords:**") or line.startswith("**Key Words:**"):
-            add_body_paragraph(doc, line, style="Journal Abstract", indent=False, size=10.0)
+            is_keywords = line.startswith(("**주제어:**", "**Keywords:**", "**Key Words:**"))
+            p = add_body_paragraph(
+                doc,
+                line,
+                style="Journal Abstract",
+                indent=False,
+                size=10.0,
+            )
+            if is_keywords:
+                p.paragraph_format.space_before = Pt(10)
+            else:
+                p.paragraph_format.first_line_indent = Mm(7)
+            if in_english_abstract or line.startswith(("**Keywords:**", "**Key Words:**")):
+                p.alignment = WD_ALIGN_PARAGRAPH.LEFT
         else:
-            add_body_paragraph(doc, line)
+            p = add_body_paragraph(doc, line)
+            if in_references:
+                p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+                p.paragraph_format.left_indent = Mm(7)
+                p.paragraph_format.first_line_indent = Mm(-7)
         idx += 1
 
     core = doc.core_properties
@@ -510,14 +625,20 @@ def build():
         "생성형 AI의 한국어 개인식별정보(PII) 유출 위험과 "
         "정규화 기반 Layer 0의 필요성"
     )
-    core.subject = "「범죄와 정책」 투고 검증본"
+    core.subject = (
+        "「범죄와 정책」 심사용 익명원고"
+        if anonymous
+        else "「범죄와 정책」 투고 검증본"
+    )
     core.keywords = "생성형 인공지능, 개인정보, 가드레일, Layer 0, 형사정책"
     core.author = ""
     core.last_modified_by = ""
-    doc.save(OUTPUT)
-    normalize_docx_archive(OUTPUT)
-    print(OUTPUT)
+    core.comments = ""
+    doc.save(output)
+    normalize_docx_archive(output, scrub_metadata=anonymous)
+    print(output)
 
 
 if __name__ == "__main__":
     build()
+    build(ANONYMOUS_OUTPUT, anonymous=True)

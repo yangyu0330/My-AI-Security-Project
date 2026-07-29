@@ -847,9 +847,10 @@ def main() -> None:
         "필요하지만 충분하지 않은",
         "한국어를 “Optimized and supported”",
         "A Lifestyle-Routine Activity Theory (LRAT) Approach to Cybercrime Victimization: An Empirical Assessment of SNS Lifestyle Exposure Activities",
-        "블라데미르 T. 콩고·여승준·최진혁",
-        "송봉규. (2026). AI시대 범죄학 패러다임 전환에 대한 접근.",
-        "백서진·최한림·박윤지·정보남·함근희. (2026). 다중 전자문서 환경에서 문서 구조 기반 개인정보 노출 위험과 비식별화 처리에 관한 연구.",
+        "블라데미르 T. 콩고, 여승준, 최진혁",
+        "송봉규 (2026). AI시대 범죄학 패러다임 전환에 대한 접근.",
+        "백서진, 최한림, 박윤지, 정보남, 함근희 (2026). 다중 전자문서 환경에서 문서 구조 기반 개인정보 노출 위험과 비식별화 처리에 관한 연구.",
+        "본 원고의 문장 가독성 개선, 형식 점검, 출처 후보 검색 및 코드 기반 재계산 절차의 보조에 OpenAI Codex를 사용하였다.",
         "대통령령 제36340호",
         "presidio.dataprivacystack.org/supported_entities/",
         "1,519개 중 29개(1.91%)",
@@ -880,8 +881,8 @@ def main() -> None:
     manuscript_order = (
         "## 국문초록",
         "## 목 차",
-        "# I. 서론",
-        "# 참고문헌",
+        "# Ⅰ. 서론",
+        "# 참 고 문 헌",
         "# ABSTRACT",
     )
     manuscript_positions = [manuscript.index(marker) for marker in manuscript_order]
@@ -910,12 +911,14 @@ def main() -> None:
         "https://ksoc.re.kr/편집규정",
         "https://ksoc.re.kr/온라인-투고-시스템",
         "해당 파일이나 경로가 존재하지 않습니다",
-        "현행 공식 원문 검증 근거로 사용하지 않는다",
+        "전달받은 집필요령",
+        "전달받은 투고샘플",
         "공백 포함 674자",
         "공백 포함 1,498자",
         "Microsoft Word 재조판·PDF 내보내기 20쪽",
         "주민등록번호",
-        "팀 검토 단계에서는 HWP를 만들지 않는다",
+        "심사용 익명 파일",
+        "AI 사용 공개",
     )
     for claim in required_submission_record_claims:
         assert claim in submission_record, claim
@@ -923,12 +926,12 @@ def main() -> None:
         ROOT / "paper" / "투고전_외부확인_및_저자정보_입력양식.md"
     ).read_text(encoding="utf-8")
     for claim in (
-        "DOCX 원고 접수 허용 여부와 HWP 필수 여부",
+        "전달받은 HWP 투고샘플 외에 DOCX도 병행 접수하는지",
         "현재 KCI 등록·등재·등재후보 상태",
         "ksoc.edit@gmail.com",
         "주민등록번호",
         "공개 브랜치에 커밋하지 않는다",
-        "77건 A/B 독립판정 및 불일치 합의 완료",
+        "77건 A/B 독립판정, 제3자 재현과 법률 전문가 검토는 학회 제출 필수가 아니라",
         "KCI 문헌유사도 15% 이하 결과서 확보",
     ):
         assert claim in external_gate_form, claim
@@ -945,7 +948,7 @@ def main() -> None:
         *(f"K{number}" for number in range(1, 8)),
         *(f"F{number}" for number in range(1, 9)),
     }
-    manuscript_body, reference_list = manuscript.split("# 참고문헌", 1)
+    manuscript_body, reference_list = manuscript.split("# 참 고 문 헌", 1)
     for source in academic_sources:
         assert source["citation_marker"] in manuscript_body, source["id"]
         assert source["reference_marker"] in reference_list, source["id"]
