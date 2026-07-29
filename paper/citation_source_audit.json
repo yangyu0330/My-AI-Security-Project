@@ -1,6 +1,6 @@
 {
-  "audit_date": "2026-07-26",
-  "scope": "All 13 academic works cited in the final manuscript; official KCI, publisher, government-library, or author/public-institution full-text records",
+  "audit_date": "2026-07-30",
+  "scope": "All 15 academic works cited in the final manuscript; official journal issue, KCI, publisher, government-library, or author/public-institution full-text records",
   "interpretation_rule": "Existence and bibliographic identity are checked separately from claim support. Where only an abstract or publisher metadata was accessible, the manuscript does not attribute detailed results beyond that accessible text.",
   "sources": [
     {
@@ -52,6 +52,26 @@
       "verification_level": "KCI bibliography and abstract",
       "citation_marker": "블라데미르 T. 콩고·여승준·최진혁, 2025",
       "reference_marker": "블라데미르 T. 콩고·여승준·최진혁. (2025). Applying Routine Activity Theory To Cybercrime"
+    },
+    {
+      "id": "K6",
+      "title": "AI시대 범죄학 패러다임 전환에 대한 접근",
+      "year": 2026,
+      "record": "https://ksoc.re.kr/forum/view/351790",
+      "doi": null,
+      "verification_level": "official journal issue full text, pages 5-18",
+      "citation_marker": "송봉규, 2026",
+      "reference_marker": "송봉규. (2026). AI시대 범죄학 패러다임 전환에 대한 접근."
+    },
+    {
+      "id": "K7",
+      "title": "다중 전자문서 환경에서 문서 구조 기반 개인정보 노출 위험과 비식별화 처리에 관한 연구",
+      "year": 2026,
+      "record": "https://ksoc.re.kr/forum/view/351790",
+      "doi": null,
+      "verification_level": "official journal issue full text, pages 19-34",
+      "citation_marker": "백서진 외, 2026",
+      "reference_marker": "백서진·최한림·박윤지·정보남·함근희. (2026). 다중 전자문서 환경에서 문서 구조 기반 개인정보 노출 위험과 비식별화 처리에 관한 연구."
     },
     {
       "id": "F1",
@@ -135,10 +155,10 @@
     }
   ],
   "result": {
-    "academic_references": 13,
-    "korean": 5,
+    "academic_references": 15,
+    "korean": 7,
     "international": 8,
-    "unique_ids": 13,
+    "unique_ids": 15,
     "all_have_primary_or_authoritative_records": true,
     "all_have_in_text_citation_markers": true,
     "all_have_reference_list_markers": true

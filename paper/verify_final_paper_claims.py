@@ -815,7 +815,7 @@ def main() -> None:
     manuscript = (
         ROOT / "paper" / "범죄와정책_최종논문_검증반영.md"
     ).read_text(encoding="utf-8")
-    assert "원고 작성·최종 자동검증 기준일: 2026년 7월 27일" in manuscript
+    assert "원고 작성·최종 자동검증 기준일: 2026년 7월 30일" in manuscript
     assert (
         "commit `694ca717dd47e3d8f229bfa4da84c1fad607576b`"
         in manuscript
@@ -848,6 +848,8 @@ def main() -> None:
         "한국어를 “Optimized and supported”",
         "A Lifestyle-Routine Activity Theory (LRAT) Approach to Cybercrime Victimization: An Empirical Assessment of SNS Lifestyle Exposure Activities",
         "블라데미르 T. 콩고·여승준·최진혁",
+        "송봉규. (2026). AI시대 범죄학 패러다임 전환에 대한 접근.",
+        "백서진·최한림·박윤지·정보남·함근희. (2026). 다중 전자문서 환경에서 문서 구조 기반 개인정보 노출 위험과 비식별화 처리에 관한 연구.",
         "대통령령 제36340호",
         "presidio.dataprivacystack.org/supported_entities/",
         "1,519개 중 29개(1.91%)",
@@ -907,12 +909,11 @@ def main() -> None:
         "https://ksoc.re.kr/범죄와-정책-소개",
         "https://ksoc.re.kr/편집규정",
         "https://ksoc.re.kr/온라인-투고-시스템",
-        "ea0838598796954c438af84da87719abb0fdf68949c74b4bddac74336097c0a0",
-        "4fd3e6a3b01efc9413948fc3c354aca1e95df7020451631e9fb070d9d514bfeb",
-        "b1948be27639b35a70b8f2a7a7eee6183277a6a5e3d291f2c16e08879211ee81",
+        "해당 파일이나 경로가 존재하지 않습니다",
+        "현행 공식 원문 검증 근거로 사용하지 않는다",
         "공백 포함 674자",
         "공백 포함 1,498자",
-        "Microsoft Word 계산 20쪽",
+        "Microsoft Word 재조판·PDF 내보내기 20쪽",
         "주민등록번호",
         "팀 검토 단계에서는 HWP를 만들지 않는다",
     )
@@ -938,10 +939,10 @@ def main() -> None:
         )
     )
     academic_sources = citation_audit["sources"]
-    assert len(academic_sources) == 13
-    assert len({source["id"] for source in academic_sources}) == 13
+    assert len(academic_sources) == 15
+    assert len({source["id"] for source in academic_sources}) == 15
     assert {source["id"] for source in academic_sources} == {
-        *(f"K{number}" for number in range(1, 6)),
+        *(f"K{number}" for number in range(1, 8)),
         *(f"F{number}" for number in range(1, 9)),
     }
     manuscript_body, reference_list = manuscript.split("# 참고문헌", 1)
@@ -954,10 +955,10 @@ def main() -> None:
     ]
     assert len(dois) == len(set(dois)) == 9
     assert citation_audit["result"] == {
-        "academic_references": 13,
-        "korean": 5,
+        "academic_references": 15,
+        "korean": 7,
         "international": 8,
-        "unique_ids": 13,
+        "unique_ids": 15,
         "all_have_primary_or_authoritative_records": True,
         "all_have_in_text_citation_markers": True,
         "all_have_reference_list_markers": True,
@@ -968,7 +969,7 @@ def main() -> None:
         "\nLEGACY, POST-MUTATION, CODE-TEST, REPOSITORY-SCOPE, "
         "TARGET-JOURNAL-ARCHIVE, "
         "KCI-CATALOG, LAW, SERVICE-DOMAIN, 77-CASE "
-        "REVIEW-PACKET, AND 13-SOURCE CITATION ASSERTIONS PASSED"
+        "REVIEW-PACKET, AND 15-SOURCE CITATION ASSERTIONS PASSED"
     )
 
 

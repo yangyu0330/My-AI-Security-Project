@@ -76,7 +76,7 @@ def main():
     required_text = (
         "생성형 AI의 한국어 개인식별정보(PII) 유출 위험과 정규화 기반 Layer 0의 필요성",
         "Korean Personally Identifiable Information Leakage Risks in Generative AI",
-        "원고 작성·최종 자동검증 기준일: 2026년 7월 27일",
+        "원고 작성·최종 자동검증 기준일: 2026년 7월 30일",
         "694ca717dd47e3d8f229bfa4da84c1fad607576b",
         "9,964건(99.64%)",
         "1,354건",
@@ -84,6 +84,7 @@ def main():
         "Layer 0",
         "성별·젠더 변수를 포함하지 않은 시스템 감사",
         "A Lifestyle-Routine Activity Theory (LRAT) Approach",
+        "다중 전자문서 환경에서 문서 구조 기반 개인정보 노출 위험과 비식별화 처리에 관한 연구",
         "presidio.dataprivacystack.org/supported_entities/",
         "1,519개 중 29개(1.91%)",
         "693개 중 48개(6.93%)",
