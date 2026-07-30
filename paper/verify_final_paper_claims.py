@@ -854,7 +854,7 @@ def main() -> None:
         "대통령령 제36340호",
         "presidio.dataprivacystack.org/supported_entities/",
         "1,519개 중 29개(1.91%)",
-        "조문별 시행일은 국가법령정보센터 공식 XML에서 모두 2026년 1월 22일",
+        "제35조 제1항 후단의 개정 내용은 2026년 7월 21일부터 적용",
         "693개 중 48개(6.93%)",
         "의료 265개 중 44개(16.60%)",
         "개발문서 255개 중 4개(1.57%)",
@@ -956,7 +956,7 @@ def main() -> None:
     dois = [
         source["doi"] for source in academic_sources if source["doi"] is not None
     ]
-    assert len(dois) == len(set(dois)) == 9
+    assert len(dois) == len(set(dois)) == 10
     assert citation_audit["result"] == {
         "academic_references": 15,
         "korean": 7,
