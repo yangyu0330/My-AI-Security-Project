@@ -52,7 +52,7 @@ def verify_document(path, anonymous):
         assert abs(actual[key] - target) <= 2, (key, actual[key], target)
 
     assert len(document.sections) == 1
-    assert len(document.tables) == 10
+    assert len(document.tables) == 9
     assert document.core_properties.author == ""
     assert document.core_properties.last_modified_by == ""
     assert document.core_properties.title == (
@@ -106,7 +106,7 @@ def verify_document(path, anonymous):
         "1,354건",
         "9.12%에서 18.75%",
         "Layer 0",
-        "성별·젠더 변수를 포함하지 않은 시스템 감사",
+        "성별·젠더 변수를 포함하지 않은 시스템 성능평가",
         "A Lifestyle-Routine Activity Theory (LRAT) Approach",
         "다중 전자문서 환경에서 문서 구조 기반 개인정보 노출 위험과 비식별화 처리에 관한 연구",
         "백서진, 최한림, 박윤지, 정보남, 함근희, 2026",
@@ -118,8 +118,8 @@ def verify_document(path, anonymous):
         "의료 265개 중 44개(16.60%)",
         "개발문서 255개 중 4개(1.57%)",
         "제35조 제1항 후단의 개정 내용은 2026년 7월 21일부터 적용",
-        "<표 1> 저장소별 감사 기준과 역할",
-        "<표 9> Layer 0와 LLM 판별기의 지연시간",
+        "<표 1> 합성 평가자료의 구성",
+        "<표 8> Layer 0와 LLM 판별기의 지연시간",
     )
     for claim in required_text:
         assert claim in normalized_text, claim
@@ -144,7 +144,7 @@ def verify_document(path, anonymous):
     assert "13. 자모·한자" not in normalized_text
     assert "18. 탐지 범위" not in normalized_text
     assert "23. 데이터 행 수" not in normalized_text
-    assert "1. 기술 데이터셋의 pii_type" in normalized_text
+    assert "1. 기술 데이터셋의 PII 유형 분류값" in normalized_text
     assert "4. 기대되는 기술 조치" in normalized_text
 
     english_abstract_paragraph = document.paragraphs[

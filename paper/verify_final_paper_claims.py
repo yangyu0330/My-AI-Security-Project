@@ -816,10 +816,8 @@ def main() -> None:
         ROOT / "paper" / "범죄와정책_최종논문_검증반영.md"
     ).read_text(encoding="utf-8")
     assert "원고 작성·최종 자동검증 기준일: 2026년 7월 30일" in manuscript
-    assert (
-        "commit `694ca717dd47e3d8f229bfa4da84c1fad607576b`"
-        in manuscript
-    )
+    assert "재현자료 공개계획:" in manuscript
+    assert "게재 확정 후 코드·평가자료·실행환경과 버전 식별정보를 공개" in manuscript
     assert (
         "표면형을 보존한 문맥 변형에서는 증가가 입증되지 않았다"
         in manuscript
@@ -836,8 +834,7 @@ def main() -> None:
     required_manuscript_claims = (
         "# 생성형 AI의 한국어 개인식별정보(PII) 유출 위험과 정규화 기반 Layer 0의 필요성",
         "Korean Personally Identifiable Information Leakage Risks in Generative AI",
-        "110개 원격 참조",
-        "110 remote references",
+        "정규화 기반 Layer 0와 패턴 탐지, 상용 가드레일 및 LLM 판별기를 결합한 다계층 방어체계",
         "9,964건(99.64%)",
         "2,060건(20.67%)",
         "706건(7.09%)",
@@ -850,7 +847,7 @@ def main() -> None:
         "블라데미르 T. 콩고, 여승준, 최진혁",
         "송봉규 (2026). AI시대 범죄학 패러다임 전환에 대한 접근.",
         "백서진, 최한림, 박윤지, 정보남, 함근희 (2026). 다중 전자문서 환경에서 문서 구조 기반 개인정보 노출 위험과 비식별화 처리에 관한 연구.",
-        "본 원고의 문장 가독성 개선, 형식 점검, 출처 후보 검색 및 코드 기반 재계산 절차의 보조에 OpenAI Codex를 사용하였다.",
+        "본 원고의 문장 가독성 개선, 형식 점검, 출처 후보 검색 및 코드 기반 계산 절차의 보조에 OpenAI Codex를 사용하였다.",
         "대통령령 제36340호",
         "presidio.dataprivacystack.org/supported_entities/",
         "1,519개 중 29개(1.91%)",
@@ -859,7 +856,7 @@ def main() -> None:
         "의료 265개 중 44개(16.60%)",
         "개발문서 255개 중 4개(1.57%)",
         "금융 29개와 AWS 지원문서 144개에서는 탐지가 없었다",
-        "서비스도메인_오탐_2인독립검토표.md",
+        "탐지된 48건은 동일 원문을 이용해 두 검토자가 독립 판정",
         "## 목 차",
         "# ABSTRACT",
     )
@@ -899,9 +896,9 @@ def main() -> None:
     ).group(1).strip()
     assert 550 <= len(korean_abstract) <= 800
     assert 1000 <= len(english_abstract) <= 1600
-    table_numbers = re.findall(r"\*\*<표 ([1-9])>[^*]+\*\*", manuscript)
-    assert table_numbers == [str(number) for number in range(1, 10)]
-    assert manuscript.count("\n자료:") == 9
+    table_numbers = re.findall(r"\*\*<표 ([1-8])>[^*]+\*\*", manuscript)
+    assert table_numbers == [str(number) for number in range(1, 9)]
+    assert manuscript.count("\n자료:") == 8
 
     submission_record = (
         ROOT / "paper" / "범죄와정책_공식투고규격_원문검증기록.md"
